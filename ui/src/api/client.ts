@@ -1,3 +1,5 @@
+import i18n from "@/i18n/index";
+
 const BASE = "/api";
 
 export class ApiError extends Error {
@@ -27,7 +29,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   if (!res.ok) {
     const errorBody = await res.json().catch(() => null);
     throw new ApiError(
-      (errorBody as { error?: string } | null)?.error ?? `Request failed: ${res.status}`,
+      (errorBody as { error?: string } | null)?.error ??
+        i18n.t("errors.requestFailed", { statusCode: res.status }),
       res.status,
       errorBody,
     );

@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { GOAL_STATUSES, GOAL_LEVELS } from "@paperclipai/shared";
 import { useDialog } from "../context/DialogContext";
@@ -33,7 +34,15 @@ const levelLabels: Record<string, string> = {
   task: "Task",
 };
 
+const levelLabelsT = (t: (key: string) => string) => ({
+  company: t("goals.level.company"),
+  team: t("goals.level.team"),
+  agent: t("goals.level.agent"),
+  task: t("goals.level.task"),
+});
+
 export function NewGoalDialog() {
+  const { t } = useTranslation();
   const { newGoalOpen, newGoalDefaults, closeNewGoal } = useDialog();
   const { selectedCompanyId, selectedCompany } = useCompany();
   const queryClient = useQueryClient();
@@ -104,6 +113,19 @@ export function NewGoalDialog() {
 
   const currentParent = (goals ?? []).find((g) => g.id === appliedParentId);
 
+  function getGoalStatusLabelKey(statusValue: string): string {
+    switch (statusValue) {
+      case "on_track":
+        return "goals.onTrack";
+      case "at_risk":
+        return "goals.atRisk";
+      case "off_track":
+        return "goals.offTrack";
+      default:
+        return statusValue;
+    }
+  }
+
   return (
     <Dialog
       open={newGoalOpen}
@@ -128,7 +150,7 @@ export function NewGoalDialog() {
               </span>
             )}
             <span className="text-muted-foreground/60">&rsaquo;</span>
-            <span>{newGoalDefaults.parentId ? "New sub-goal" : "New goal"}</span>
+            <span>{newGoalDefaults.parentId ? t("goals.newSubGoal") : t("goals.newGoal")}</span>
           </div>
           <div className="flex items-center gap-1">
             <Button
@@ -154,7 +176,7 @@ export function NewGoalDialog() {
         <div className="px-4 pt-4 pb-2 shrink-0">
           <input
             className="w-full text-lg font-semibold bg-transparent outline-none placeholder:text-muted-foreground/50"
-            placeholder="Goal title"
+            placeholder={t("goals.goalTitle")}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onKeyDown={(e) => {
@@ -173,7 +195,7 @@ export function NewGoalDialog() {
             ref={descriptionEditorRef}
             value={description}
             onChange={setDescription}
-            placeholder="Add description..."
+            placeholder={t("goals.descriptionOptional")}
             bordered={false}
             contentClassName={cn("text-sm text-muted-foreground", expanded ? "min-h-[220px]" : "min-h-[120px]")}
             imageUploadHandler={async (file) => {
@@ -202,7 +224,7 @@ export function NewGoalDialog() {
                   )}
                   onClick={() => { setStatus(s); setStatusOpen(false); }}
                 >
-                  {s}
+                  {t(getGoalStatusLabelKey(s))}
                 </button>
               ))}
             </PopoverContent>
@@ -237,7 +259,7 @@ export function NewGoalDialog() {
             <PopoverTrigger asChild>
               <button className="inline-flex items-center gap-1.5 rounded-md border border-border px-2 py-1 text-xs hover:bg-accent/50 transition-colors">
                 <Target className="h-3 w-3 text-muted-foreground" />
-                {currentParent ? currentParent.title : "Parent goal"}
+                {currentParent ? currentParent.title : t("goals.parentGoal")}
               </button>
             </PopoverTrigger>
             <PopoverContent className="w-48 p-1" align="start">
@@ -248,7 +270,7 @@ export function NewGoalDialog() {
                 )}
                 onClick={() => { setParentId(""); setParentOpen(false); }}
               >
-                No parent
+                {t("goals.noParent")}
               </button>
               {(goals ?? []).map((g) => (
                 <button
@@ -273,7 +295,7 @@ export function NewGoalDialog() {
             disabled={!title.trim() || createGoal.isPending}
             onClick={handleSubmit}
           >
-            {createGoal.isPending ? "Creating…" : newGoalDefaults.parentId ? "Create sub-goal" : "Create goal"}
+            {createGoal.isPending ? t("goals.creatingGoal") : newGoalDefaults.parentId ? t("goals.createSubGoalBtn") : t("goals.createGoalBtn")}
           </Button>
         </div>
       </DialogContent>

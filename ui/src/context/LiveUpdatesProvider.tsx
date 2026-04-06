@@ -8,6 +8,7 @@ import { useCompany } from "./CompanyContext";
 import type { ToastInput } from "./ToastContext";
 import { useToast } from "./ToastContext";
 import { queryKeys } from "../lib/queryKeys";
+import i18n from "@/i18n/index";
 import { toCompanyRelativePath } from "../lib/company-routes";
 import { useLocation } from "../lib/router";
 
@@ -62,13 +63,13 @@ function resolveActorLabel(
   actorId: string | null,
 ): string {
   if (actorType === "agent" && actorId) {
-    return resolveAgentName(queryClient, companyId, actorId) ?? `Agent ${shortId(actorId)}`;
+    return resolveAgentName(queryClient, companyId, actorId) ?? i18n.t("ui.agentUnknown", { agentId: shortId(actorId) });
   }
-  if (actorType === "system") return "System";
+  if (actorType === "system") return i18n.t("ui.actorSystem");
   if (actorType === "user" && actorId) {
-    return "Board";
+    return i18n.t("ui.assigneeBoard");
   }
-  return "Someone";
+  return i18n.t("ui.actorSomeone");
 }
 
 interface IssueToastContext {
@@ -379,13 +380,13 @@ function buildJoinRequestToast(
   if (action !== "join.requested" && action !== "join.request_replayed") return null;
 
   const requestType = readString(details?.requestType);
-  const label = requestType === "agent" ? "Agent" : "Someone";
+  const actorLabel = requestType === "agent" ? i18n.t("ui.actorAgent") : i18n.t("ui.actorSomeone");
 
   return {
-    title: `${label} wants to join`,
-    body: "A new join request is waiting for approval.",
+    title: i18n.t("ui.joinRequestWantsToJoin", { label: actorLabel }),
+    body: i18n.t("inbox.joinRequestWaitingApproval"),
     tone: "info",
-    action: { label: "View inbox", href: "/inbox/mine" },
+    action: { label: i18n.t("inbox.viewInbox"), href: "/inbox/mine" },
     dedupeKey: `join-request:${entityId}`,
   };
 }
@@ -401,11 +402,11 @@ function buildAgentStatusToast(
   if (!agentId || !status || !AGENT_TOAST_STATUSES.has(status)) return null;
 
   const tone = status === "error" ? "error" : "info";
-  const name = nameOf(agentId) ?? `Agent ${shortId(agentId)}`;
+  const name = nameOf(agentId) ?? i18n.t("ui.agentUnknown", { agentId: shortId(agentId) });
   const title =
     status === "running"
-      ? `${name} started`
-      : `${name} errored`;
+      ? i18n.t("agents.agentStarted", { name })
+      : i18n.t("agents.agentErrored", { name });
 
   const agents = queryClient.getQueryData<Agent[]>(queryKeys.agents.list(companyId));
   const agent = agents?.find((a) => a.id === agentId);
@@ -415,7 +416,7 @@ function buildAgentStatusToast(
     title,
     body,
     tone,
-    action: { label: "View agent", href: `/agents/${agentId}` },
+    action: { label: i18n.t("ui.viewAgent"), href: `/agents/${agentId}` },
     dedupeKey: `agent-status:${agentId}:${status}`,
   };
 }
@@ -431,20 +432,20 @@ function buildRunStatusToast(
 
   const error = readString(payload.error);
   const triggerDetail = readString(payload.triggerDetail);
-  const name = nameOf(agentId) ?? `Agent ${shortId(agentId)}`;
+  const name = nameOf(agentId) ?? i18n.t("ui.agentUnknown", { agentId: shortId(agentId) });
   const tone = status === "succeeded" ? "success" : status === "cancelled" ? "warn" : "error";
   const statusLabel =
-    status === "succeeded" ? "succeeded"
-      : status === "failed" ? "failed"
-        : status === "timed_out" ? "timed out"
-          : "cancelled";
+    status === "succeeded" ? i18n.t("routines.succeeded")
+      : status === "failed" ? i18n.t("routines.failed")
+        : status === "timed_out" ? i18n.t("routines.timedOut")
+          : i18n.t("routines.cancelled");
   const title = `${name} run ${statusLabel}`;
 
   let body: string | undefined;
   if (error) {
     body = truncate(error, 100);
   } else if (triggerDetail) {
-    body = `Trigger: ${triggerDetail}`;
+    body = i18n.t("routines.triggeredBy", { detail: triggerDetail });
   }
 
   return {
@@ -452,7 +453,7 @@ function buildRunStatusToast(
     body,
     tone,
     ttlMs: status === "succeeded" ? 5000 : 7000,
-    action: { label: "View run", href: `/agents/${agentId}/runs/${runId}` },
+    action: { label: i18n.t("ui.viewRun"), href: `/agents/${agentId}/runs/${runId}` },
     dedupeKey: `run-status:${runId}:${status}`,
   };
 }

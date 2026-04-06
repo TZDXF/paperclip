@@ -1,15 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export type DatePreset = "mtd" | "7d" | "30d" | "ytd" | "all" | "custom";
-
-export const PRESET_LABELS: Record<DatePreset, string> = {
-  mtd: "Month to Date",
-  "7d": "Last 7 Days",
-  "30d": "Last 30 Days",
-  ytd: "Year to Date",
-  all: "All Time",
-  custom: "Custom",
-};
 
 export const PRESET_KEYS: DatePreset[] = ["mtd", "7d", "30d", "ytd", "all", "custom"];
 
@@ -62,9 +54,12 @@ export interface UseDateRangeResult {
   to: string;
   /** false when preset=custom but both dates are not yet selected */
   customReady: boolean;
+  /** Translated labels for each date preset */
+  presetLabels: Record<DatePreset, string>;
 }
 
 export function useDateRange(): UseDateRangeResult {
+  const { t } = useTranslation();
   const [preset, setPreset] = useState<DatePreset>("mtd");
   const [customFrom, setCustomFrom] = useState("");
   const [customTo, setCustomTo] = useState("");
@@ -106,6 +101,15 @@ export function useDateRange(): UseDateRangeResult {
 
   const customReady = preset !== "custom" || (!!customFrom && !!customTo);
 
+  const presetLabels: Record<DatePreset, string> = {
+    mtd: t("common.datePresets.mtd"),
+    "7d": t("common.datePresets.7d"),
+    "30d": t("common.datePresets.30d"),
+    ytd: t("common.datePresets.ytd"),
+    all: t("common.datePresets.all"),
+    custom: t("common.datePresets.custom"),
+  };
+
   return {
     preset,
     setPreset,
@@ -116,5 +120,6 @@ export function useDateRange(): UseDateRangeResult {
     from,
     to,
     customReady,
+    presetLabels,
   };
 }

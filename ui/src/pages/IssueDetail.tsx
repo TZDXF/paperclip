@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ChangeEvent, type DragEvent 
 import { pickTextColorForPillBg } from "@/lib/color-contrast";
 import { Link, useLocation, useNavigate, useParams } from "@/lib/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { issuesApi } from "../api/issues";
 import { activityApi } from "../api/activity";
 import { heartbeatsApi } from "../api/heartbeats";
@@ -91,7 +92,7 @@ type IssueDetailComment = (IssueComment | OptimisticIssueComment) & {
   queueTargetRunId?: string | null;
 };
 
-const ACTION_LABELS: Record<string, string> = {
+const ACTION_LABELS_FALLBACK: Record<string, string> = {
   "issue.created": "created the issue",
   "issue.updated": "updated the issue",
   "issue.checked_out": "checked out the issue",
@@ -172,36 +173,40 @@ function titleizeFilename(input: string) {
     .join(" ");
 }
 
-function formatAction(action: string, details?: Record<string, unknown> | null): string {
+function formatAction(action: string, details?: Record<string, unknown> | null, t?: ReturnType<typeof useTranslation>[0]): string {
   if (action === "issue.updated" && details) {
     const previous = (details._previous ?? {}) as Record<string, unknown>;
     const parts: string[] = [];
 
     if (details.status !== undefined) {
       const from = previous.status;
+      const humanFrom = humanizeValue(from);
+      const humanTo = humanizeValue(details.status);
       parts.push(
         from
-          ? `changed the status from ${humanizeValue(from)} to ${humanizeValue(details.status)}`
-          : `changed the status to ${humanizeValue(details.status)}`
+          ? (t ? t("activity:statusChanged", { from: humanFrom, to: humanTo }) : `changed status from ${humanFrom} to ${humanTo}`)
+          : (t ? t("activity:statusChangedTo", { status: humanTo }) : `changed status to ${humanTo}`)
       );
     }
     if (details.priority !== undefined) {
       const from = previous.priority;
+      const humanFrom = humanizeValue(from);
+      const humanTo = humanizeValue(details.priority);
       parts.push(
         from
-          ? `changed the priority from ${humanizeValue(from)} to ${humanizeValue(details.priority)}`
-          : `changed the priority to ${humanizeValue(details.priority)}`
+          ? (t ? t("activity:priorityChanged", { from: humanFrom, to: humanTo }) : `changed priority from ${humanFrom} to ${humanTo}`)
+          : (t ? t("activity:priorityChangedTo", { priority: humanTo }) : `changed priority to ${humanTo}`)
       );
     }
     if (details.assigneeAgentId !== undefined || details.assigneeUserId !== undefined) {
       parts.push(
         details.assigneeAgentId || details.assigneeUserId
-          ? "assigned the issue"
-          : "unassigned the issue",
+          ? (t ? t("activity:assignedIssue") : "assigned the issue")
+          : (t ? t("activity:unassignedIssue") : "unassigned the issue"),
       );
     }
-    if (details.title !== undefined) parts.push("updated the title");
-    if (details.description !== undefined) parts.push("updated the description");
+    if (details.title !== undefined) parts.push(t ? t("activity:updatedTitle") : "updated the title");
+    if (details.description !== undefined) parts.push(t ? t("activity:updatedDescription") : "updated the description");
 
     if (parts.length > 0) return parts.join(", ");
   }
@@ -211,9 +216,10 @@ function formatAction(action: string, details?: Record<string, unknown> | null):
   ) {
     const key = typeof details.key === "string" ? details.key : "document";
     const title = typeof details.title === "string" && details.title ? ` (${details.title})` : "";
-    return `${ACTION_LABELS[action] ?? action} ${key}${title}`;
+    const baseLabel = t ? t(`activity:actionVerbs.${action}`, { defaultValue: ACTION_LABELS_FALLBACK[action] ?? action.replace(/[._]/g, " ") }) : (ACTION_LABELS_FALLBACK[action] ?? action.replace(/[._]/g, " "));
+    return `${baseLabel} ${key}${title}`;
   }
-  return ACTION_LABELS[action] ?? action.replace(/[._]/g, " ");
+  return t ? t(`activity:actionVerbs.${action}`, { defaultValue: ACTION_LABELS_FALLBACK[action] ?? action.replace(/[._]/g, " ") }) : (ACTION_LABELS_FALLBACK[action] ?? action.replace(/[._]/g, " "));
 }
 
 function mergeOptimisticFeedbackVote(
@@ -274,14 +280,15 @@ function mergeOptimisticFeedbackVote(
 }
 
 function ActorIdentity({ evt, agentMap }: { evt: ActivityEvent; agentMap: Map<string, Agent> }) {
+  const { t } = useTranslation(["ui", "activity"]);
   const id = evt.actorId;
   if (evt.actorType === "agent") {
     const agent = agentMap.get(id);
     return <Identity name={agent?.name ?? id.slice(0, 8)} size="sm" />;
   }
-  if (evt.actorType === "system") return <Identity name="System" size="sm" />;
-  if (evt.actorType === "user") return <Identity name="Board" size="sm" />;
-  return <Identity name={id || "Unknown"} size="sm" />;
+  if (evt.actorType === "system") return <Identity name={t("ui:actorSystem")} size="sm" />;
+  if (evt.actorType === "user") return <Identity name={t("ui:assigneeBoard")} size="sm" />;
+  return <Identity name={id || t("ui:actorSomeone")} size="sm" />;
 }
 
 export function IssueDetail() {
@@ -293,6 +300,7 @@ export function IssueDetail() {
   const navigate = useNavigate();
   const location = useLocation();
   const { pushToast } = useToast();
+  const { t } = useTranslation(["activity", "ui"]);
   const [moreOpen, setMoreOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [mobilePropsOpen, setMobilePropsOpen] = useState(false);
@@ -1629,7 +1637,7 @@ export function IssueDetail() {
               {activity.slice(0, 20).map((evt) => (
                 <div key={evt.id} className="flex items-center gap-1.5 text-xs text-muted-foreground">
                   <ActorIdentity evt={evt} agentMap={agentMap} />
-                  <span>{formatAction(evt.action, evt.details)}</span>
+                  <span>{formatAction(evt.action, evt.details, t)}</span>
                   <span className="ml-auto shrink-0">{relativeTime(evt.createdAt)}</span>
                 </div>
               ))}

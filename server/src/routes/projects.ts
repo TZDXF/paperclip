@@ -67,7 +67,7 @@ export function projectRoutes(db: Db) {
     const id = req.params.id as string;
     const project = await svc.getById(id);
     if (!project) {
-      res.status(404).json({ error: "Project not found" });
+      res.status(404).json({ error: "Project 未找到" });
       return;
     }
     assertCompanyAccess(req, project.companyId);
@@ -88,7 +88,7 @@ export function projectRoutes(db: Db) {
       const createdWorkspace = await svc.createWorkspace(project.id, workspace);
       if (!createdWorkspace) {
         await svc.remove(project.id);
-        res.status(422).json({ error: "Invalid project workspace payload" });
+        res.status(422).json({ error: "Project Workspace 负载无效" });
         return;
       }
       createdWorkspaceId = createdWorkspace.id;
@@ -120,7 +120,7 @@ export function projectRoutes(db: Db) {
     const id = req.params.id as string;
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Project not found" });
+      res.status(404).json({ error: "Project 未找到" });
       return;
     }
     assertCompanyAccess(req, existing.companyId);
@@ -130,7 +130,7 @@ export function projectRoutes(db: Db) {
     }
     const project = await svc.update(id, body);
     if (!project) {
-      res.status(404).json({ error: "Project not found" });
+      res.status(404).json({ error: "Project 未找到" });
       return;
     }
 
@@ -153,7 +153,7 @@ export function projectRoutes(db: Db) {
     const id = req.params.id as string;
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Project not found" });
+      res.status(404).json({ error: "Project 未找到" });
       return;
     }
     assertCompanyAccess(req, existing.companyId);
@@ -165,13 +165,13 @@ export function projectRoutes(db: Db) {
     const id = req.params.id as string;
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Project not found" });
+      res.status(404).json({ error: "Project 未找到" });
       return;
     }
     assertCompanyAccess(req, existing.companyId);
     const workspace = await svc.createWorkspace(id, req.body);
     if (!workspace) {
-      res.status(422).json({ error: "Invalid project workspace payload" });
+      res.status(422).json({ error: "Project Workspace 负载无效" });
       return;
     }
 
@@ -203,18 +203,18 @@ export function projectRoutes(db: Db) {
       const workspaceId = req.params.workspaceId as string;
       const existing = await svc.getById(id);
       if (!existing) {
-        res.status(404).json({ error: "Project not found" });
+        res.status(404).json({ error: "Project 未找到" });
         return;
       }
       assertCompanyAccess(req, existing.companyId);
       const workspaceExists = (await svc.listWorkspaces(id)).some((workspace) => workspace.id === workspaceId);
       if (!workspaceExists) {
-        res.status(404).json({ error: "Project workspace not found" });
+        res.status(404).json({ error: "Project Workspace 未找到" });
         return;
       }
       const workspace = await svc.updateWorkspace(id, workspaceId, req.body);
       if (!workspace) {
-        res.status(422).json({ error: "Invalid project workspace payload" });
+        res.status(422).json({ error: "Project Workspace 负载无效" });
         return;
       }
 
@@ -242,32 +242,32 @@ export function projectRoutes(db: Db) {
     const workspaceId = req.params.workspaceId as string;
     const action = String(req.params.action ?? "").trim().toLowerCase();
     if (action !== "start" && action !== "stop" && action !== "restart") {
-      res.status(404).json({ error: "Runtime service action not found" });
+      res.status(404).json({ error: "运行时服务操作未找到" });
       return;
     }
 
     const project = await svc.getById(id);
     if (!project) {
-      res.status(404).json({ error: "Project not found" });
+      res.status(404).json({ error: "Project 未找到" });
       return;
     }
     assertCompanyAccess(req, project.companyId);
 
     const workspace = project.workspaces.find((entry) => entry.id === workspaceId) ?? null;
     if (!workspace) {
-      res.status(404).json({ error: "Project workspace not found" });
+      res.status(404).json({ error: "Project Workspace 未找到" });
       return;
     }
 
     const workspaceCwd = workspace.cwd;
     if (!workspaceCwd) {
-      res.status(422).json({ error: "Project workspace needs a local path before Paperclip can manage local runtime services" });
+      res.status(422).json({ error: "Project Workspace 需要本地路径，Paperclip 才能管理本地运行时服务" });
       return;
     }
 
     const runtimeConfig = workspace.runtimeConfig?.workspaceRuntime ?? null;
     if ((action === "start" || action === "restart") && !runtimeConfig) {
-      res.status(422).json({ error: "Project workspace has no runtime service configuration" });
+      res.status(422).json({ error: "Project Workspace 没有运行时服务配置" });
       return;
     }
 
@@ -381,13 +381,13 @@ export function projectRoutes(db: Db) {
     const workspaceId = req.params.workspaceId as string;
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Project not found" });
+      res.status(404).json({ error: "Project 未找到" });
       return;
     }
     assertCompanyAccess(req, existing.companyId);
     const workspace = await svc.removeWorkspace(id, workspaceId);
     if (!workspace) {
-      res.status(404).json({ error: "Project workspace not found" });
+      res.status(404).json({ error: "Project Workspace 未找到" });
       return;
     }
 
@@ -413,13 +413,13 @@ export function projectRoutes(db: Db) {
     const id = req.params.id as string;
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Project not found" });
+      res.status(404).json({ error: "Project 未找到" });
       return;
     }
     assertCompanyAccess(req, existing.companyId);
     const project = await svc.remove(id);
     if (!project) {
-      res.status(404).json({ error: "Project not found" });
+      res.status(404).json({ error: "Project 未找到" });
       return;
     }
 

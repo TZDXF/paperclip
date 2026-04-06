@@ -64,6 +64,47 @@ export const adapterLabels = getAdapterLabels();
 
 export const roleLabels = AGENT_ROLE_LABELS as Record<string, string>;
 
+export function getHelp(t: (key: string) => string): Record<string, string> {
+  return {
+    name: t("agents.help.name"),
+    title: t("agents.help.title"),
+    role: t("agents.help.role"),
+    reportsTo: t("agents.help.reportsTo"),
+    capabilities: t("agents.help.capabilities"),
+    adapterType: t("agents.help.adapterType"),
+    cwd: t("agents.help.cwd"),
+    promptTemplate: t("agents.help.promptTemplate"),
+    model: t("agents.help.model"),
+    thinkingEffort: t("agents.help.thinkingEffort"),
+    chrome: t("agents.help.chrome"),
+    dangerouslySkipPermissions: t("agents.help.dangerouslySkipPermissions"),
+    dangerouslyBypassSandbox: t("agents.help.dangerouslyBypassSandbox"),
+    search: t("agents.help.search"),
+    workspaceStrategy: t("agents.help.workspaceStrategy"),
+    workspaceBaseRef: t("agents.help.workspaceBaseRef"),
+    workspaceBranchTemplate: t("agents.help.workspaceBranchTemplate"),
+    worktreeParentDir: t("agents.help.worktreeParentDir"),
+    runtimeServicesJson: t("agents.help.runtimeServicesJson"),
+    maxTurnsPerRun: t("agents.help.maxTurnsPerRun"),
+    command: t("agents.help.command"),
+    localCommand: t("agents.help.localCommand"),
+    args: t("agents.help.args"),
+    extraArgs: t("agents.help.extraArgs"),
+    envVars: t("agents.help.envVars"),
+    bootstrapPrompt: t("agents.help.bootstrapPrompt"),
+    payloadTemplateJson: t("agents.help.payloadTemplateJson"),
+    webhookUrl: t("agents.help.webhookUrl"),
+    heartbeatInterval: t("agents.help.heartbeatInterval"),
+    intervalSec: t("agents.help.intervalSec"),
+    timeoutSec: t("agents.help.timeoutSec"),
+    graceSec: t("agents.help.graceSec"),
+    wakeOnDemand: t("agents.help.wakeOnDemand"),
+    cooldownSec: t("agents.help.cooldownSec"),
+    maxConcurrentRuns: t("agents.help.maxConcurrentRuns"),
+    budgetMonthlyCents: t("agents.help.budgetMonthlyCents"),
+  };
+}
+
 /* ---- Primitive components ---- */
 
 export function HintIcon({ text }: { text: string }) {

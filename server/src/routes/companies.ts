@@ -117,7 +117,7 @@ export function companyRoutes(db: Db, storage?: StorageService) {
     }
     const company = await svc.getById(companyId);
     if (!company) {
-      res.status(404).json({ error: "Company not found" });
+      res.status(404).json({ error: "公司未找到" });
       return;
     }
     res.json(company);
@@ -295,7 +295,7 @@ export function companyRoutes(db: Db, storage?: StorageService) {
     const actor = getActorInfo(req);
     const existingCompany = await svc.getById(companyId);
     if (!existingCompany) {
-      res.status(404).json({ error: "Company not found" });
+      res.status(404).json({ error: "公司未找到" });
       return;
     }
     let body: Record<string, unknown>;
@@ -330,7 +330,7 @@ export function companyRoutes(db: Db, storage?: StorageService) {
 
     const company = await svc.update(companyId, body);
     if (!company) {
-      res.status(404).json({ error: "Company not found" });
+      res.status(404).json({ error: "公司未找到" });
       return;
     }
     await logActivity(db, {
@@ -352,7 +352,7 @@ export function companyRoutes(db: Db, storage?: StorageService) {
     await assertCanUpdateBranding(req, companyId);
     const company = await svc.update(companyId, req.body);
     if (!company) {
-      res.status(404).json({ error: "Company not found" });
+      res.status(404).json({ error: "公司未找到" });
       return;
     }
     const actor = getActorInfo(req);
@@ -376,7 +376,7 @@ export function companyRoutes(db: Db, storage?: StorageService) {
     assertCompanyAccess(req, companyId);
     const company = await svc.archive(companyId);
     if (!company) {
-      res.status(404).json({ error: "Company not found" });
+      res.status(404).json({ error: "公司未找到" });
       return;
     }
     await logActivity(db, {
@@ -396,7 +396,7 @@ export function companyRoutes(db: Db, storage?: StorageService) {
     assertCompanyAccess(req, companyId);
     const company = await svc.remove(companyId);
     if (!company) {
-      res.status(404).json({ error: "Company not found" });
+      res.status(404).json({ error: "公司未找到" });
       return;
     }
     res.json({ ok: true });

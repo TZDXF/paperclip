@@ -252,7 +252,7 @@ export function setupLiveEventsWebSocketServer(
     })
       .then((context) => {
         if (!context) {
-          rejectUpgrade(socket, "403 Forbidden", "forbidden");
+          rejectUpgrade(socket, "403 Forbidden", "禁止访问");
           return;
         }
 
@@ -265,7 +265,7 @@ export function setupLiveEventsWebSocketServer(
       })
       .catch((err) => {
         logger.error({ err, path: req.url }, "failed websocket upgrade authorization");
-        rejectUpgrade(socket, "500 Internal Server Error", "upgrade failed");
+        rejectUpgrade(socket, "500 Internal Server Error", "升级失败");
       });
   });
 

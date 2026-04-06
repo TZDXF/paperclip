@@ -205,7 +205,7 @@ export function adapterRoutes() {
     const { packageName, isLocalPath = false, version } = req.body as AdapterInstallRequest;
 
     if (!packageName || typeof packageName !== "string") {
-      res.status(400).json({ error: "packageName is required and must be a string." });
+      res.status(400).json({ error: "packageName 是必填字段且必须为字符串" });
       return;
     }
 
@@ -316,9 +316,9 @@ export function adapterRoutes() {
 
       // Distinguish npm errors from load errors
       if (message.includes("npm") || message.includes("ERR!")) {
-        res.status(500).json({ error: `npm install failed: ${message}` });
+        res.status(500).json({ error: `npm 安装失败: ${message}` });
       } else {
-        res.status(500).json({ error: `Failed to install adapter: ${message}` });
+        res.status(500).json({ error: `安装 Adapter 失败: ${message}` });
       }
     }
   });
@@ -338,14 +338,14 @@ export function adapterRoutes() {
     const { disabled } = req.body as { disabled?: boolean };
 
     if (typeof disabled !== "boolean") {
-      res.status(400).json({ error: "Request body must include { \"disabled\": true|false }." });
+      res.status(400).json({ error: "请求体必须包含 { \"disabled\": true|false }" });
       return;
     }
 
     // Check that the adapter exists in the registry
     const existing = findServerAdapter(adapterType);
     if (!existing) {
-      res.status(404).json({ error: `Adapter "${adapterType}" is not registered.` });
+      res.status(404).json({ error: `Adapter "${adapterType}" 未注册` });
       return;
     }
 
@@ -373,12 +373,12 @@ export function adapterRoutes() {
     const { paused } = req.body as { paused?: boolean };
 
     if (typeof paused !== "boolean") {
-      res.status(400).json({ error: "\"paused\" (boolean) is required in request body." });
+      res.status(400).json({ error: "\"paused\" (布尔值) 是请求体中的必填字段" });
       return;
     }
 
     if (!BUILTIN_ADAPTER_TYPES.has(adapterType)) {
-      res.status(400).json({ error: `Type "${adapterType}" is not a builtin adapter.` });
+      res.status(400).json({ error: `类型 "${adapterType}" 不是内置 Adapter` });
       return;
     }
 
@@ -400,7 +400,7 @@ export function adapterRoutes() {
     const adapterType = req.params.type;
 
     if (!adapterType) {
-      res.status(400).json({ error: "Adapter type is required." });
+      res.status(400).json({ error: "Adapter type 是必填字段" });
       return;
     }
 
@@ -416,7 +416,7 @@ export function adapterRoutes() {
     const existing = findServerAdapter(adapterType);
     if (!existing) {
       res.status(404).json({
-        error: `Adapter "${adapterType}" is not registered.`,
+        error: `Adapter "${adapterType}" 未注册`,
       });
       return;
     }
@@ -425,7 +425,7 @@ export function adapterRoutes() {
     const externalRecord = getAdapterPluginByType(adapterType);
     if (!externalRecord) {
       res.status(404).json({
-        error: `Adapter "${adapterType}" is not an externally installed adapter.`,
+        error: `Adapter "${adapterType}" 不是外部安装的 Adapter`,
       });
       return;
     }
@@ -476,7 +476,7 @@ export function adapterRoutes() {
 
     // Built-in adapters cannot be reloaded unless overridden by an external one
     if (BUILTIN_ADAPTER_TYPES.has(type) && !getAdapterPluginByType(type)) {
-      res.status(400).json({ error: "Cannot reload built-in adapter." });
+      res.status(400).json({ error: "无法重载内置 Adapter" });
       return;
     }
 
@@ -486,7 +486,7 @@ export function adapterRoutes() {
 
       // Not found in the external adapter store
       if (!newModule) {
-        res.status(404).json({ error: `Adapter "${type}" is not an externally installed adapter.` });
+        res.status(404).json({ error: `Adapter "${type}" 不是外部安装的 Adapter` });
         return;
       }
 
@@ -511,7 +511,7 @@ export function adapterRoutes() {
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       logger.error({ err, type }, "Failed to reload external adapter");
-      res.status(500).json({ error: `Failed to reload adapter: ${message}` });
+      res.status(500).json({ error: `重载 Adapter 失败: ${message}` });
     }
   });
 
@@ -527,18 +527,18 @@ export function adapterRoutes() {
     const type = req.params.type;
 
     if (BUILTIN_ADAPTER_TYPES.has(type) && !getAdapterPluginByType(type)) {
-      res.status(400).json({ error: "Cannot reinstall built-in adapter." });
+      res.status(400).json({ error: "无法重装内置 Adapter" });
       return;
     }
 
     const record = getAdapterPluginByType(type);
     if (!record) {
-      res.status(404).json({ error: `Adapter "${type}" is not an externally installed adapter.` });
+      res.status(404).json({ error: `Adapter "${type}" 不是外部安装的 Adapter` });
       return;
     }
 
     if (record.localPath) {
-      res.status(400).json({ error: "Local-path adapters cannot be reinstalled. Use Reload instead." });
+      res.status(400).json({ error: "本地路径 Adapter 无法重装，请使用重载" });
       return;
     }
 
@@ -555,7 +555,7 @@ export function adapterRoutes() {
       // Reload the freshly installed adapter
       const newModule = await reloadExternalAdapter(type);
       if (!newModule) {
-        res.status(500).json({ error: "npm install succeeded but adapter reload failed." });
+        res.status(500).json({ error: "npm 安装成功但 Adapter 重载失败" });
         return;
       }
 
@@ -579,7 +579,7 @@ export function adapterRoutes() {
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       logger.error({ err, type }, "Failed to reinstall adapter");
-      res.status(500).json({ error: `Reinstall failed: ${message}` });
+      res.status(500).json({ error: `重装失败: ${message}` });
     }
   });
 
@@ -600,7 +600,7 @@ export function adapterRoutes() {
       return;
     }
     if (!adapter.getConfigSchema) {
-      res.status(404).json({ error: `Adapter "${type}" does not provide a config schema.` });
+      res.status(404).json({ error: `Adapter "${type}" 未提供配置 Schema` });
       return;
     }
 
@@ -617,7 +617,7 @@ export function adapterRoutes() {
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       logger.error({ err, type }, "Failed to resolve config schema");
-      res.status(500).json({ error: `Failed to resolve config schema: ${message}` });
+      res.status(500).json({ error: `解析配置 Schema 失败: ${message}` });
     }
   });
 
@@ -633,7 +633,7 @@ export function adapterRoutes() {
     const { type } = req.params;
     const source = getOrExtractUiParserSource(type);
     if (!source) {
-      res.status(404).json({ error: `No UI parser available for adapter "${type}".` });
+      res.status(404).json({ error: `没有可用于 Adapter "${type}" 的 UI 解析器` });
       return;
     }
     res.type("application/javascript").send(source);

@@ -88,7 +88,7 @@ export function routineRoutes(db: Db) {
   router.get("/routines/:id", async (req, res) => {
     const detail = await svc.getDetail(req.params.id as string);
     if (!detail) {
-      res.status(404).json({ error: "Routine not found" });
+      res.status(404).json({ error: "Routine 未找到" });
       return;
     }
     assertCompanyAccess(req, detail.companyId);
@@ -98,7 +98,7 @@ export function routineRoutes(db: Db) {
   router.patch("/routines/:id", validate(updateRoutineSchema), async (req, res) => {
     const routine = await assertCanManageExistingRoutine(req, req.params.id as string);
     if (!routine) {
-      res.status(404).json({ error: "Routine not found" });
+      res.status(404).json({ error: "Routine 未找到" });
       return;
     }
     const assigneeWillChange =
@@ -139,7 +139,7 @@ export function routineRoutes(db: Db) {
   router.get("/routines/:id/runs", async (req, res) => {
     const routine = await svc.get(req.params.id as string);
     if (!routine) {
-      res.status(404).json({ error: "Routine not found" });
+      res.status(404).json({ error: "Routine 未找到" });
       return;
     }
     assertCompanyAccess(req, routine.companyId);
@@ -151,7 +151,7 @@ export function routineRoutes(db: Db) {
   router.post("/routines/:id/triggers", validate(createRoutineTriggerSchema), async (req, res) => {
     const routine = await assertCanManageExistingRoutine(req, req.params.id as string);
     if (!routine) {
-      res.status(404).json({ error: "Routine not found" });
+      res.status(404).json({ error: "Routine 未找到" });
       return;
     }
     await assertBoardCanAssignTasks(req, routine.companyId);
@@ -177,12 +177,12 @@ export function routineRoutes(db: Db) {
   router.patch("/routine-triggers/:id", validate(updateRoutineTriggerSchema), async (req, res) => {
     const trigger = await svc.getTrigger(req.params.id as string);
     if (!trigger) {
-      res.status(404).json({ error: "Routine trigger not found" });
+      res.status(404).json({ error: "Routine 触发器未找到" });
       return;
     }
     const routine = await assertCanManageExistingRoutine(req, trigger.routineId);
     if (!routine) {
-      res.status(404).json({ error: "Routine not found" });
+      res.status(404).json({ error: "Routine 未找到" });
       return;
     }
     await assertBoardCanAssignTasks(req, routine.companyId);
@@ -208,12 +208,12 @@ export function routineRoutes(db: Db) {
   router.delete("/routine-triggers/:id", async (req, res) => {
     const trigger = await svc.getTrigger(req.params.id as string);
     if (!trigger) {
-      res.status(404).json({ error: "Routine trigger not found" });
+      res.status(404).json({ error: "Routine 触发器未找到" });
       return;
     }
     const routine = await assertCanManageExistingRoutine(req, trigger.routineId);
     if (!routine) {
-      res.status(404).json({ error: "Routine not found" });
+      res.status(404).json({ error: "Routine 未找到" });
       return;
     }
     await svc.deleteTrigger(trigger.id);
@@ -238,12 +238,12 @@ export function routineRoutes(db: Db) {
     async (req, res) => {
       const trigger = await svc.getTrigger(req.params.id as string);
       if (!trigger) {
-        res.status(404).json({ error: "Routine trigger not found" });
+        res.status(404).json({ error: "Routine 触发器未找到" });
         return;
       }
       const routine = await assertCanManageExistingRoutine(req, trigger.routineId);
       if (!routine) {
-        res.status(404).json({ error: "Routine not found" });
+        res.status(404).json({ error: "Routine 未找到" });
         return;
       }
       const rotated = await svc.rotateTriggerSecret(trigger.id, {
@@ -269,7 +269,7 @@ export function routineRoutes(db: Db) {
   router.post("/routines/:id/run", validate(runRoutineSchema), async (req, res) => {
     const routine = await assertCanManageExistingRoutine(req, req.params.id as string);
     if (!routine) {
-      res.status(404).json({ error: "Routine not found" });
+      res.status(404).json({ error: "Routine 未找到" });
       return;
     }
     await assertBoardCanAssignTasks(req, routine.companyId);

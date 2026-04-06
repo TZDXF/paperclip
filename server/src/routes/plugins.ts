@@ -486,7 +486,7 @@ export function pluginRoutes(
     assertBoard(req);
 
     if (!toolDeps) {
-      res.status(501).json({ error: "Plugin tool dispatch is not enabled" });
+      res.status(501).json({ error: "Plugin 工具分发未启用" });
       return;
     }
 
@@ -520,13 +520,13 @@ export function pluginRoutes(
     assertBoard(req);
 
     if (!toolDeps) {
-      res.status(501).json({ error: "Plugin tool dispatch is not enabled" });
+      res.status(501).json({ error: "Plugin 工具分发未启用" });
       return;
     }
 
     const body = (req.body as PluginToolExecuteRequest | undefined);
     if (!body) {
-      res.status(400).json({ error: "Request body is required" });
+      res.status(400).json({ error: "需要请求体" });
       return;
     }
 
@@ -534,12 +534,12 @@ export function pluginRoutes(
 
     // Validate required fields
     if (!tool || typeof tool !== "string") {
-      res.status(400).json({ error: '"tool" is required and must be a string' });
+      res.status(400).json({ error: "'tool' 是必填字段且必须为字符串" });
       return;
     }
 
     if (!runContext || typeof runContext !== "object") {
-      res.status(400).json({ error: '"runContext" is required and must be an object' });
+      res.status(400).json({ error: "'runContext' 是必填字段且必须为对象" });
       return;
     }
 
@@ -555,7 +555,7 @@ export function pluginRoutes(
     // Verify the tool exists
     const registeredTool = toolDeps.toolDispatcher.getTool(tool);
     if (!registeredTool) {
-      res.status(404).json({ error: `Tool "${tool}" not found` });
+      res.status(404).json({ error: `工具 "${tool}" 未找到` });
       return;
     }
 
@@ -606,30 +606,30 @@ export function pluginRoutes(
 
     // Input validation
     if (!packageName || typeof packageName !== "string") {
-      res.status(400).json({ error: "packageName is required and must be a string" });
+      res.status(400).json({ error: "packageName 是必填字段且必须为字符串" });
       return;
     }
 
     if (version !== undefined && typeof version !== "string") {
-      res.status(400).json({ error: "version must be a string if provided" });
+      res.status(400).json({ error: "version 必须是字符串（如果提供）" });
       return;
     }
 
     if (isLocalPath !== undefined && typeof isLocalPath !== "boolean") {
-      res.status(400).json({ error: "isLocalPath must be a boolean if provided" });
+      res.status(400).json({ error: "isLocalPath 必须是布尔值（如果提供）" });
       return;
     }
 
     // Validate package name format
     const trimmedPackage = packageName.trim();
     if (trimmedPackage.length === 0) {
-      res.status(400).json({ error: "packageName cannot be empty" });
+      res.status(400).json({ error: "packageName 不能为空" });
       return;
     }
 
     // Basic security check for package name (prevent injection)
     if (!isLocalPath && /[<>:"|?*]/.test(trimmedPackage)) {
-      res.status(400).json({ error: "packageName contains invalid characters" });
+      res.status(400).json({ error: "packageName 包含无效字符" });
       return;
     }
 
@@ -641,7 +641,7 @@ export function pluginRoutes(
       const discovered = await loader.installPlugin(installOptions);
 
       if (!discovered.manifest) {
-        res.status(500).json({ error: "Plugin installed but manifest is missing" });
+        res.status(500).json({ error: "Plugin 已安装但缺少 manifest" });
         return;
       }
 
@@ -661,7 +661,7 @@ export function pluginRoutes(
         res.json(updated);
       } else {
         // This shouldn't happen since installPlugin already registers in the DB
-        res.status(500).json({ error: "Plugin installed but not found in registry" });
+        res.status(500).json({ error: "Plugin 已安装但在注册表中未找到" });
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
@@ -796,7 +796,7 @@ export function pluginRoutes(
     assertBoard(req);
 
     if (!bridgeDeps) {
-      res.status(501).json({ error: "Plugin bridge is not enabled" });
+      res.status(501).json({ error: "Plugin bridge 未启用" });
       return;
     }
 
@@ -805,7 +805,7 @@ export function pluginRoutes(
     // Resolve plugin
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
@@ -822,7 +822,7 @@ export function pluginRoutes(
     // Validate request body
     const body = req.body as PluginBridgeDataRequest | undefined;
     if (!body || !body.key || typeof body.key !== "string") {
-      res.status(400).json({ error: '"key" is required and must be a string' });
+      res.status(400).json({ error: "'key' 是必填字段且必须为字符串" });
       return;
     }
 
@@ -879,7 +879,7 @@ export function pluginRoutes(
     assertBoard(req);
 
     if (!bridgeDeps) {
-      res.status(501).json({ error: "Plugin bridge is not enabled" });
+      res.status(501).json({ error: "Plugin bridge 未启用" });
       return;
     }
 
@@ -888,7 +888,7 @@ export function pluginRoutes(
     // Resolve plugin
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
@@ -905,7 +905,7 @@ export function pluginRoutes(
     // Validate request body
     const body = req.body as PluginBridgeActionRequest | undefined;
     if (!body || !body.key || typeof body.key !== "string") {
-      res.status(400).json({ error: '"key" is required and must be a string' });
+      res.status(400).json({ error: "'key' 是必填字段且必须为字符串" });
       return;
     }
 
@@ -963,7 +963,7 @@ export function pluginRoutes(
     assertBoard(req);
 
     if (!bridgeDeps) {
-      res.status(501).json({ error: "Plugin bridge is not enabled" });
+      res.status(501).json({ error: "Plugin bridge 未启用" });
       return;
     }
 
@@ -972,7 +972,7 @@ export function pluginRoutes(
     // Resolve plugin
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
@@ -1042,7 +1042,7 @@ export function pluginRoutes(
     assertBoard(req);
 
     if (!bridgeDeps) {
-      res.status(501).json({ error: "Plugin bridge is not enabled" });
+      res.status(501).json({ error: "Plugin bridge 未启用" });
       return;
     }
 
@@ -1051,7 +1051,7 @@ export function pluginRoutes(
     // Resolve plugin
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
@@ -1123,7 +1123,7 @@ export function pluginRoutes(
     assertBoard(req);
 
     if (!bridgeDeps?.streamBus) {
-      res.status(501).json({ error: "Plugin stream bridge is not enabled" });
+      res.status(501).json({ error: "Plugin stream bridge 未启用" });
       return;
     }
 
@@ -1137,7 +1137,7 @@ export function pluginRoutes(
 
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
@@ -1202,7 +1202,7 @@ export function pluginRoutes(
     const { pluginId } = req.params;
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
@@ -1234,7 +1234,7 @@ export function pluginRoutes(
 
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
@@ -1269,7 +1269,7 @@ export function pluginRoutes(
 
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
@@ -1309,7 +1309,7 @@ export function pluginRoutes(
 
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
@@ -1348,7 +1348,7 @@ export function pluginRoutes(
 
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
@@ -1416,7 +1416,7 @@ export function pluginRoutes(
 
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
@@ -1468,7 +1468,7 @@ export function pluginRoutes(
 
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
@@ -1515,7 +1515,7 @@ export function pluginRoutes(
 
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
@@ -1545,7 +1545,7 @@ export function pluginRoutes(
 
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
@@ -1648,7 +1648,7 @@ export function pluginRoutes(
     assertBoard(req);
 
     if (!bridgeDeps) {
-      res.status(501).json({ error: "Plugin bridge is not enabled" });
+      res.status(501).json({ error: "Plugin bridge 未启用" });
       return;
     }
 
@@ -1656,7 +1656,7 @@ export function pluginRoutes(
 
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
@@ -1744,14 +1744,14 @@ export function pluginRoutes(
   router.get("/plugins/:pluginId/jobs", async (req, res) => {
     assertBoard(req);
     if (!jobDeps) {
-      res.status(501).json({ error: "Job scheduling is not enabled" });
+      res.status(501).json({ error: "Job 调度未启用" });
       return;
     }
 
     const { pluginId } = req.params;
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
@@ -1790,26 +1790,26 @@ export function pluginRoutes(
   router.get("/plugins/:pluginId/jobs/:jobId/runs", async (req, res) => {
     assertBoard(req);
     if (!jobDeps) {
-      res.status(501).json({ error: "Job scheduling is not enabled" });
+      res.status(501).json({ error: "Job 调度未启用" });
       return;
     }
 
     const { pluginId, jobId } = req.params;
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
     const job = await jobDeps.jobStore.getJobByIdForPlugin(plugin.id, jobId);
     if (!job) {
-      res.status(404).json({ error: "Job not found" });
+      res.status(404).json({ error: "Job 未找到" });
       return;
     }
 
     const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 25;
     if (isNaN(limit) || limit < 1 || limit > 500) {
-      res.status(400).json({ error: "limit must be a number between 1 and 500" });
+      res.status(400).json({ error: "limit 必须是 1 到 500 之间的数字" });
       return;
     }
 
@@ -1838,20 +1838,20 @@ export function pluginRoutes(
   router.post("/plugins/:pluginId/jobs/:jobId/trigger", async (req, res) => {
     assertBoard(req);
     if (!jobDeps) {
-      res.status(501).json({ error: "Job scheduling is not enabled" });
+      res.status(501).json({ error: "Job 调度未启用" });
       return;
     }
 
     const { pluginId, jobId } = req.params;
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
     const job = await jobDeps.jobStore.getJobByIdForPlugin(plugin.id, jobId);
     if (!job) {
-      res.status(404).json({ error: "Job not found" });
+      res.status(404).json({ error: "Job 未找到" });
       return;
     }
 
@@ -1894,7 +1894,7 @@ export function pluginRoutes(
    */
   router.post("/plugins/:pluginId/webhooks/:endpointKey", async (req, res) => {
     if (!webhookDeps) {
-      res.status(501).json({ error: "Webhook ingestion is not enabled" });
+      res.status(501).json({ error: "Webhook 接收未启用" });
       return;
     }
 
@@ -1903,7 +1903,7 @@ export function pluginRoutes(
     // Step 1: Resolve the plugin
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 
@@ -1918,7 +1918,7 @@ export function pluginRoutes(
     // Step 3: Validate the plugin has webhooks.receive capability
     const manifest = plugin.manifestJson;
     if (!manifest) {
-      res.status(400).json({ error: "Plugin manifest is missing" });
+      res.status(400).json({ error: "Plugin manifest 缺失" });
       return;
     }
 
@@ -2047,7 +2047,7 @@ export function pluginRoutes(
 
     const plugin = await resolvePlugin(registry, pluginId);
     if (!plugin) {
-      res.status(404).json({ error: "Plugin not found" });
+      res.status(404).json({ error: "Plugin 未找到" });
       return;
     }
 

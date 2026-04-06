@@ -99,6 +99,7 @@ import {
   type InboxWorkItem,
 } from "../lib/inbox";
 import { useDismissedInboxItems, useReadInboxItems } from "../hooks/useInboxBadge";
+import { useTranslation } from "react-i18next";
 
 type InboxCategoryFilter =
   | "everything"
@@ -798,6 +799,7 @@ export function Inbox() {
     queryFn: () => instanceSettingsApi.getExperimental(),
     retry: false,
   });
+  const { t } = useTranslation("pages");
   const [searchQuery, setSearchQuery] = useState("");
   const [allCategoryFilter, setAllCategoryFilter] = useState<InboxCategoryFilter>("everything");
   const [allApprovalFilter, setAllApprovalFilter] = useState<InboxApprovalFilter>("all");
@@ -1572,14 +1574,14 @@ export function Inbox() {
             items={[
               {
                 value: "mine",
-                label: "Mine",
+                label: t("inbox:mine"),
               },
               {
                 value: "recent",
-                label: "Recent",
+                label: t("inbox:recent"),
               },
-              { value: "unread", label: "Unread" },
-              { value: "all", label: "All" },
+              { value: "unread", label: t("inbox:unread") },
+              { value: "all", label: t("inbox:all") },
             ]}
           />
         </Tabs>
@@ -1589,7 +1591,7 @@ export function Inbox() {
             <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search inbox…"
+              placeholder={t("inbox:searchInbox")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="h-8 w-[180px] pl-8 text-xs sm:w-[220px]"
@@ -1604,17 +1606,17 @@ export function Inbox() {
                 className="h-8 shrink-0 px-2 text-xs text-muted-foreground hover:text-foreground"
               >
                 <Columns3 className="mr-1 h-3.5 w-3.5" />
-                Show / hide columns
+                {t("inbox:showHideColumns")}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[300px] rounded-xl border-border/70 p-1.5 shadow-xl shadow-black/10">
               <DropdownMenuLabel className="px-2 pb-1 pt-1.5">
                 <div className="space-y-1">
                   <div className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-                    Desktop issue rows
+                    {t("inbox:desktopIssueRows")}
                   </div>
                   <div className="text-sm font-medium text-foreground">
-                    Choose which inbox columns stay visible
+                    {t("inbox:chooseVisibleColumns")}
                   </div>
                 </div>
               </DropdownMenuLabel>
@@ -1643,7 +1645,7 @@ export function Inbox() {
                 className="rounded-lg px-3 py-2 text-sm"
               >
                 Reset defaults
-                <span className="ml-auto text-xs text-muted-foreground">status, id, updated</span>
+                <span className="ml-auto text-xs text-muted-foreground">{t("inbox:statusIdUpdated")}</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -1657,19 +1659,19 @@ export function Inbox() {
                 onClick={() => setShowMarkAllReadConfirm(true)}
                 disabled={markAllReadMutation.isPending}
               >
-                {markAllReadMutation.isPending ? "Marking…" : "Mark all as read"}
+                {markAllReadMutation.isPending ? t("inbox:marking") : t("inbox:markAllAsRead")}
               </Button>
               <Dialog open={showMarkAllReadConfirm} onOpenChange={setShowMarkAllReadConfirm}>
                 <DialogContent className="sm:max-w-md">
                   <DialogHeader>
-                    <DialogTitle>Mark all as read?</DialogTitle>
+                    <DialogTitle>{t("inbox:markAllAsReadConfirm")}</DialogTitle>
                     <DialogDescription>
-                      This will mark {unreadIssueIds.length} unread {unreadIssueIds.length === 1 ? "item" : "items"} as read.
+                      {t("inbox:markAllAsReadDescription", { count: unreadIssueIds.length, countPlural: unreadIssueIds.length === 1 ? "item" : "items" })}
                     </DialogDescription>
                   </DialogHeader>
                   <DialogFooter>
                     <Button variant="outline" onClick={() => setShowMarkAllReadConfirm(false)}>
-                      Cancel
+                      {t("inbox:cancel")}
                     </Button>
                     <Button
                       onClick={() => {
@@ -1677,7 +1679,7 @@ export function Inbox() {
                         markAllReadMutation.mutate(unreadIssueIds);
                       }}
                     >
-                      Mark all as read
+                      {t("inbox:markAllAsRead")}
                     </Button>
                   </DialogFooter>
                 </DialogContent>

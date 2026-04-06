@@ -201,7 +201,7 @@ export function agentRoutes(db: Db) {
       }
       return null;
     }
-    if (!req.actor.agentId) throw forbidden("Agent authentication required");
+    if (!req.actor.agentId) throw forbidden("需要 Agent 身份验证");
     const actorAgent = await svc.getById(req.actor.agentId);
     if (!actorAgent || actorAgent.companyId !== companyId) {
       throw forbidden("Agent key cannot access another company");
@@ -300,7 +300,7 @@ export function agentRoutes(db: Db) {
   async function assertCanUpdateAgent(req: Request, targetAgent: { id: string; companyId: string }) {
     assertCompanyAccess(req, targetAgent.companyId);
     if (req.actor.type === "board") return;
-    if (!req.actor.agentId) throw forbidden("Agent authentication required");
+    if (!req.actor.agentId) throw forbidden("需要 Agent 身份验证");
 
     const actorAgent = await svc.getById(req.actor.agentId);
     if (!actorAgent || actorAgent.companyId !== targetAgent.companyId) {
@@ -322,7 +322,7 @@ export function agentRoutes(db: Db) {
   async function assertCanReadAgent(req: Request, targetAgent: { companyId: string }) {
     assertCompanyAccess(req, targetAgent.companyId);
     if (req.actor.type === "board") return;
-    if (!req.actor.agentId) throw forbidden("Agent authentication required");
+    if (!req.actor.agentId) throw forbidden("需要 Agent 身份验证");
 
     const actorAgent = await svc.getById(req.actor.agentId);
     if (!actorAgent || actorAgent.companyId !== targetAgent.companyId) {
@@ -375,7 +375,7 @@ export function agentRoutes(db: Db) {
       throw conflict("Agent shortname is ambiguous in this company. Use the agent ID.");
     }
     if (!resolved.agent) {
-      throw notFound("Agent not found");
+      throw notFound("Agent 未找到");
     }
     return resolved.agent.id;
   }
@@ -579,7 +579,7 @@ export function agentRoutes(db: Db) {
   async function assertCanManageInstructionsPath(req: Request, targetAgent: { id: string; companyId: string }) {
     assertCompanyAccess(req, targetAgent.companyId);
     if (req.actor.type === "board") return;
-    if (!req.actor.agentId) throw forbidden("Agent authentication required");
+    if (!req.actor.agentId) throw forbidden("需要 Agent 身份验证");
 
     const actorAgent = await svc.getById(req.actor.agentId);
     if (!actorAgent || actorAgent.companyId !== targetAgent.companyId) {
@@ -816,7 +816,7 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const agent = await svc.getById(id);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     await assertCanReadConfigurations(req, agent.companyId);
@@ -859,7 +859,7 @@ export function agentRoutes(db: Db) {
       const id = req.params.id as string;
       const agent = await svc.getById(id);
       if (!agent) {
-        res.status(404).json({ error: "Agent not found" });
+        res.status(404).json({ error: "Agent 未找到" });
         return;
       }
       await assertCanUpdateAgent(req, agent);
@@ -895,7 +895,7 @@ export function agentRoutes(db: Db) {
         },
       });
       if (!updated) {
-        res.status(404).json({ error: "Agent not found" });
+        res.status(404).json({ error: "Agent 未找到" });
         return;
       }
 
@@ -1063,12 +1063,12 @@ export function agentRoutes(db: Db) {
 
   router.get("/agents/me", async (req, res) => {
     if (req.actor.type !== "agent" || !req.actor.agentId) {
-      res.status(401).json({ error: "Agent authentication required" });
+      res.status(401).json({ error: "需要 Agent 身份验证" });
       return;
     }
     const agent = await svc.getById(req.actor.agentId);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     res.json(await buildAgentDetail(agent));
@@ -1076,7 +1076,7 @@ export function agentRoutes(db: Db) {
 
   router.get("/agents/me/inbox-lite", async (req, res) => {
     if (req.actor.type !== "agent" || !req.actor.agentId || !req.actor.companyId) {
-      res.status(401).json({ error: "Agent authentication required" });
+      res.status(401).json({ error: "需要 Agent 身份验证" });
       return;
     }
 
@@ -1104,7 +1104,7 @@ export function agentRoutes(db: Db) {
 
   router.get("/agents/me/inbox/mine", async (req, res) => {
     if (req.actor.type !== "agent" || !req.actor.agentId || !req.actor.companyId) {
-      res.status(401).json({ error: "Agent authentication required" });
+      res.status(401).json({ error: "需要 Agent 身份验证" });
       return;
     }
 
@@ -1123,7 +1123,7 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const agent = await svc.getById(id);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     assertCompanyAccess(req, agent.companyId);
@@ -1141,7 +1141,7 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const agent = await svc.getById(id);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     await assertCanReadConfigurations(req, agent.companyId);
@@ -1152,7 +1152,7 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const agent = await svc.getById(id);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     await assertCanReadConfigurations(req, agent.companyId);
@@ -1165,13 +1165,13 @@ export function agentRoutes(db: Db) {
     const revisionId = req.params.revisionId as string;
     const agent = await svc.getById(id);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     await assertCanReadConfigurations(req, agent.companyId);
     const revision = await svc.getConfigRevision(id, revisionId);
     if (!revision) {
-      res.status(404).json({ error: "Revision not found" });
+      res.status(404).json({ error: "Revision 未找到" });
       return;
     }
     res.json(redactConfigRevision(revision));
@@ -1182,7 +1182,7 @@ export function agentRoutes(db: Db) {
     const revisionId = req.params.revisionId as string;
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     await assertCanUpdateAgent(req, existing);
@@ -1193,7 +1193,7 @@ export function agentRoutes(db: Db) {
       userId: actor.actorType === "user" ? actor.actorId : null,
     });
     if (!updated) {
-      res.status(404).json({ error: "Revision not found" });
+      res.status(404).json({ error: "Revision 未找到" });
       return;
     }
 
@@ -1217,7 +1217,7 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const agent = await svc.getById(id);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     assertCompanyAccess(req, agent.companyId);
@@ -1231,7 +1231,7 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const agent = await svc.getById(id);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     assertCompanyAccess(req, agent.companyId);
@@ -1250,7 +1250,7 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const agent = await svc.getById(id);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     assertCompanyAccess(req, agent.companyId);
@@ -1316,7 +1316,7 @@ export function agentRoutes(db: Db) {
       .where(eq(companies.id, companyId))
       .then((rows) => rows[0] ?? null);
     if (!company) {
-      res.status(404).json({ error: "Company not found" });
+      res.status(404).json({ error: "公司未找到" });
       return;
     }
 
@@ -1527,7 +1527,7 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     assertCompanyAccess(req, existing.companyId);
@@ -1535,18 +1535,18 @@ export function agentRoutes(db: Db) {
     if (req.actor.type === "agent") {
       const actorAgent = req.actor.agentId ? await svc.getById(req.actor.agentId) : null;
       if (!actorAgent || actorAgent.companyId !== existing.companyId) {
-        res.status(403).json({ error: "Forbidden" });
+        res.status(403).json({ error: "禁止访问" });
         return;
       }
       if (actorAgent.role !== "ceo") {
-        res.status(403).json({ error: "Only CEO can manage permissions" });
+        res.status(403).json({ error: "只有 CEO 可以管理权限" });
         return;
       }
     }
 
     const agent = await svc.updatePermissions(id, req.body);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
 
@@ -1585,7 +1585,7 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
 
@@ -1628,7 +1628,7 @@ export function agentRoutes(db: Db) {
       },
     );
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
 
@@ -1663,7 +1663,7 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     await assertCanReadAgent(req, existing);
@@ -1674,7 +1674,7 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     await assertCanManageInstructionsPath(req, existing);
@@ -1722,14 +1722,14 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     await assertCanReadAgent(req, existing);
 
     const relativePath = typeof req.query.path === "string" ? req.query.path : "";
     if (!relativePath.trim()) {
-      res.status(422).json({ error: "Query parameter 'path' is required" });
+      res.status(422).json({ error: "需要 'path' 查询参数" });
       return;
     }
 
@@ -1740,7 +1740,7 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     await assertCanManageInstructionsPath(req, existing);
@@ -1789,14 +1789,14 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     await assertCanManageInstructionsPath(req, existing);
 
     const relativePath = typeof req.query.path === "string" ? req.query.path : "";
     if (!relativePath.trim()) {
-      res.status(422).json({ error: "Query parameter 'path' is required" });
+      res.status(422).json({ error: "需要 'path' 查询参数" });
       return;
     }
 
@@ -1823,13 +1823,13 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     await assertCanUpdateAgent(req, existing);
 
     if (hasOwn(req.body as object, "permissions")) {
-      res.status(422).json({ error: "Use /api/agents/:id/permissions for permission changes" });
+      res.status(422).json({ error: "请使用 /api/agents/:id/permissions 来修改权限" });
       return;
     }
 
@@ -1839,7 +1839,7 @@ export function agentRoutes(db: Db) {
     if (hasOwn(patchData, "adapterConfig")) {
       const adapterConfig = asRecord(patchData.adapterConfig);
       if (!adapterConfig) {
-        res.status(422).json({ error: "adapterConfig must be an object" });
+        res.status(422).json({ error: "adapterConfig 必须是对象" });
         return;
       }
       const changingInstructionsPath = Object.keys(adapterConfig).some((key) =>
@@ -1924,7 +1924,7 @@ export function agentRoutes(db: Db) {
       },
     });
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
 
@@ -1948,7 +1948,7 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const agent = await svc.pause(id);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
 
@@ -1971,7 +1971,7 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const agent = await svc.resume(id);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
 
@@ -1992,7 +1992,7 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const agent = await svc.terminate(id);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
 
@@ -2015,7 +2015,7 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const agent = await svc.remove(id);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
 
@@ -2064,7 +2064,7 @@ export function agentRoutes(db: Db) {
     const keyId = req.params.keyId as string;
     const revoked = await svc.revokeKey(keyId);
     if (!revoked) {
-      res.status(404).json({ error: "Key not found" });
+      res.status(404).json({ error: "密钥未找到" });
       return;
     }
     res.json({ ok: true });
@@ -2074,13 +2074,13 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const agent = await svc.getById(id);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     assertCompanyAccess(req, agent.companyId);
 
     if (req.actor.type === "agent" && req.actor.agentId !== id) {
-      res.status(403).json({ error: "Agent can only invoke itself" });
+      res.status(403).json({ error: "Agent 只能调用自身" });
       return;
     }
 
@@ -2124,13 +2124,13 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const agent = await svc.getById(id);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     assertCompanyAccess(req, agent.companyId);
 
     if (req.actor.type === "agent" && req.actor.agentId !== id) {
-      res.status(403).json({ error: "Agent can only invoke itself" });
+      res.status(403).json({ error: "Agent 只能调用自身" });
       return;
     }
 
@@ -2174,12 +2174,12 @@ export function agentRoutes(db: Db) {
     const id = req.params.id as string;
     const agent = await svc.getById(id);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
     assertCompanyAccess(req, agent.companyId);
     if (agent.adapterType !== "claude_local") {
-      res.status(400).json({ error: "Login is only supported for claude_local agents" });
+      res.status(400).json({ error: "仅支持 claude_local 类型 Agent 登录" });
       return;
     }
 
@@ -2270,7 +2270,7 @@ export function agentRoutes(db: Db) {
     const runId = req.params.runId as string;
     const run = await heartbeat.getRun(runId);
     if (!run) {
-      res.status(404).json({ error: "Heartbeat run not found" });
+      res.status(404).json({ error: "心跳运行未找到" });
       return;
     }
     assertCompanyAccess(req, run.companyId);
@@ -2301,7 +2301,7 @@ export function agentRoutes(db: Db) {
     const runId = req.params.runId as string;
     const run = await heartbeat.getRun(runId);
     if (!run) {
-      res.status(404).json({ error: "Heartbeat run not found" });
+      res.status(404).json({ error: "心跳运行未找到" });
       return;
     }
     assertCompanyAccess(req, run.companyId);
@@ -2323,7 +2323,7 @@ export function agentRoutes(db: Db) {
     const runId = req.params.runId as string;
     const run = await heartbeat.getRun(runId);
     if (!run) {
-      res.status(404).json({ error: "Heartbeat run not found" });
+      res.status(404).json({ error: "心跳运行未找到" });
       return;
     }
     assertCompanyAccess(req, run.companyId);
@@ -2342,7 +2342,7 @@ export function agentRoutes(db: Db) {
     const runId = req.params.runId as string;
     const run = await heartbeat.getRun(runId);
     if (!run) {
-      res.status(404).json({ error: "Heartbeat run not found" });
+      res.status(404).json({ error: "心跳运行未找到" });
       return;
     }
     assertCompanyAccess(req, run.companyId);
@@ -2357,7 +2357,7 @@ export function agentRoutes(db: Db) {
     const operationId = req.params.operationId as string;
     const operation = await workspaceOperations.getById(operationId);
     if (!operation) {
-      res.status(404).json({ error: "Workspace operation not found" });
+      res.status(404).json({ error: "Workspace 操作未找到" });
       return;
     }
     assertCompanyAccess(req, operation.companyId);
@@ -2378,7 +2378,7 @@ export function agentRoutes(db: Db) {
     const isIdentifier = /^[A-Z]+-\d+$/i.test(rawId);
     const issue = isIdentifier ? await issueSvc.getByIdentifier(rawId) : await issueSvc.getById(rawId);
     if (!issue) {
-      res.status(404).json({ error: "Issue not found" });
+      res.status(404).json({ error: "Issue 未找到" });
       return;
     }
     assertCompanyAccess(req, issue.companyId);
@@ -2416,7 +2416,7 @@ export function agentRoutes(db: Db) {
     const isIdentifier = /^[A-Z]+-\d+$/i.test(rawId);
     const issue = isIdentifier ? await issueSvc.getByIdentifier(rawId) : await issueSvc.getById(rawId);
     if (!issue) {
-      res.status(404).json({ error: "Issue not found" });
+      res.status(404).json({ error: "Issue 未找到" });
       return;
     }
     assertCompanyAccess(req, issue.companyId);

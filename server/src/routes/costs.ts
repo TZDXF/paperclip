@@ -38,7 +38,7 @@ export function costRoutes(db: Db) {
     assertCompanyAccess(req, companyId);
 
     if (req.actor.type === "agent" && req.actor.agentId !== req.body.agentId) {
-      res.status(403).json({ error: "Agent can only report its own costs" });
+      res.status(403).json({ error: "Agent 只能上报自己的成本" });
       return;
     }
 
@@ -200,7 +200,7 @@ export function costRoutes(db: Db) {
     // and any forged ids are rejected before we touch provider credentials
     const company = await companies.getById(companyId);
     if (!company) {
-      res.status(404).json({ error: "Company not found" });
+      res.status(404).json({ error: "公司未找到" });
       return;
     }
     const results = await fetchAllQuotaWindows();
@@ -253,7 +253,7 @@ export function costRoutes(db: Db) {
     assertCompanyAccess(req, companyId);
     const company = await companies.update(companyId, { budgetMonthlyCents: req.body.budgetMonthlyCents });
     if (!company) {
-      res.status(404).json({ error: "Company not found" });
+      res.status(404).json({ error: "公司未找到" });
       return;
     }
 
@@ -285,7 +285,7 @@ export function costRoutes(db: Db) {
     const agentId = req.params.agentId as string;
     const agent = await agents.getById(agentId);
     if (!agent) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
 
@@ -293,14 +293,14 @@ export function costRoutes(db: Db) {
 
     if (req.actor.type === "agent") {
       if (req.actor.agentId !== agentId) {
-        res.status(403).json({ error: "Agent can only change its own budget" });
+        res.status(403).json({ error: "Agent 只能修改自己的预算" });
         return;
       }
     }
 
     const updated = await agents.update(agentId, { budgetMonthlyCents: req.body.budgetMonthlyCents });
     if (!updated) {
-      res.status(404).json({ error: "Agent not found" });
+      res.status(404).json({ error: "Agent 未找到" });
       return;
     }
 

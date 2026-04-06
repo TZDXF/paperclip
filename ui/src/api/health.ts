@@ -1,3 +1,5 @@
+import i18n from "@/i18n/index";
+
 export type DevServerHealthStatus = {
   enabled: true;
   restartRequired: boolean;
@@ -34,7 +36,7 @@ export const healthApi = {
     });
     if (!res.ok) {
       const payload = await res.json().catch(() => null) as { error?: string } | null;
-      throw new Error(payload?.error ?? `Failed to load health (${res.status})`);
+      throw new Error(payload?.error ?? i18n.t("errors.failedToLoadHealth", { statusCode: res.status }));
     }
     return res.json();
   },

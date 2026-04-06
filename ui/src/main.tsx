@@ -4,6 +4,8 @@ import * as ReactDOM from "react-dom";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "@/lib/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { I18nextProvider } from "react-i18next";
+import i18n from "./i18n";
 import { App } from "./App";
 import { CompanyProvider } from "./context/CompanyContext";
 import { LiveUpdatesProvider } from "./context/LiveUpdatesProvider";
@@ -52,7 +54,9 @@ createRoot(document.getElementById("root")!).render(
                         <PanelProvider>
                           <PluginLauncherProvider>
                             <DialogProvider>
-                              <App />
+                              <I18nextProvider i18n={i18n}>
+                                <App />
+                              </I18nextProvider>
                             </DialogProvider>
                           </PluginLauncherProvider>
                         </PanelProvider>

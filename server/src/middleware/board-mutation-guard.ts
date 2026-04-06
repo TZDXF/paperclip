@@ -58,7 +58,7 @@ export function boardMutationGuard(): RequestHandler {
     }
 
     if (!isTrustedBoardMutationRequest(req)) {
-      res.status(403).json({ error: "Board mutation requires trusted browser origin" });
+      res.status(403).json({ error: "Board 变更需要可信浏览器来源" });
       return;
     }
 

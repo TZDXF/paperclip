@@ -37,7 +37,7 @@ export function executionWorkspaceRoutes(db: Db) {
     const id = req.params.id as string;
     const workspace = await svc.getById(id);
     if (!workspace) {
-      res.status(404).json({ error: "Execution workspace not found" });
+      res.status(404).json({ error: "执行 Workspace 未找到" });
       return;
     }
     assertCompanyAccess(req, workspace.companyId);
@@ -48,13 +48,13 @@ export function executionWorkspaceRoutes(db: Db) {
     const id = req.params.id as string;
     const workspace = await svc.getById(id);
     if (!workspace) {
-      res.status(404).json({ error: "Execution workspace not found" });
+      res.status(404).json({ error: "执行 Workspace 未找到" });
       return;
     }
     assertCompanyAccess(req, workspace.companyId);
     const readiness = await svc.getCloseReadiness(id);
     if (!readiness) {
-      res.status(404).json({ error: "Execution workspace not found" });
+      res.status(404).json({ error: "执行 Workspace 未找到" });
       return;
     }
     res.json(readiness);
@@ -64,7 +64,7 @@ export function executionWorkspaceRoutes(db: Db) {
     const id = req.params.id as string;
     const workspace = await svc.getById(id);
     if (!workspace) {
-      res.status(404).json({ error: "Execution workspace not found" });
+      res.status(404).json({ error: "执行 Workspace 未找到" });
       return;
     }
     assertCompanyAccess(req, workspace.companyId);
@@ -76,20 +76,20 @@ export function executionWorkspaceRoutes(db: Db) {
     const id = req.params.id as string;
     const action = String(req.params.action ?? "").trim().toLowerCase();
     if (action !== "start" && action !== "stop" && action !== "restart") {
-      res.status(404).json({ error: "Runtime service action not found" });
+      res.status(404).json({ error: "运行时服务操作未找到" });
       return;
     }
 
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Execution workspace not found" });
+      res.status(404).json({ error: "执行 Workspace 未找到" });
       return;
     }
     assertCompanyAccess(req, existing.companyId);
 
     const workspaceCwd = existing.cwd;
     if (!workspaceCwd) {
-      res.status(422).json({ error: "Execution workspace needs a local path before Paperclip can manage local runtime services" });
+      res.status(422).json({ error: "执行 Workspace 需要本地路径，Paperclip 才能管理本地运行时服务" });
       return;
     }
 
@@ -118,7 +118,7 @@ export function executionWorkspaceRoutes(db: Db) {
     const effectiveRuntimeConfig = existing.config?.workspaceRuntime ?? projectWorkspaceRuntime ?? null;
 
     if ((action === "start" || action === "restart") && !effectiveRuntimeConfig) {
-      res.status(422).json({ error: "Execution workspace has no runtime service configuration or inherited project workspace default" });
+      res.status(422).json({ error: "执行 Workspace 没有运行时服务配置或继承的项目 Workspace 默认配置" });
       return;
     }
 
@@ -216,7 +216,7 @@ export function executionWorkspaceRoutes(db: Db) {
 
     const workspace = await svc.getById(id);
     if (!workspace) {
-      res.status(404).json({ error: "Execution workspace not found" });
+      res.status(404).json({ error: "执行 Workspace 未找到" });
       return;
     }
 
@@ -244,7 +244,7 @@ export function executionWorkspaceRoutes(db: Db) {
     const id = req.params.id as string;
     const existing = await svc.getById(id);
     if (!existing) {
-      res.status(404).json({ error: "Execution workspace not found" });
+      res.status(404).json({ error: "执行 Workspace 未找到" });
       return;
     }
     assertCompanyAccess(req, existing.companyId);
@@ -278,7 +278,7 @@ export function executionWorkspaceRoutes(db: Db) {
     if (req.body.status === "archived" && existing.status !== "archived") {
       const readiness = await svc.getCloseReadiness(existing.id);
       if (!readiness) {
-        res.status(404).json({ error: "Execution workspace not found" });
+        res.status(404).json({ error: "执行 Workspace 未找到" });
         return;
       }
 
@@ -298,7 +298,7 @@ export function executionWorkspaceRoutes(db: Db) {
         cleanupReason: null,
       });
       if (!archivedWorkspace) {
-        res.status(404).json({ error: "Execution workspace not found" });
+        res.status(404).json({ error: "执行 Workspace 未找到" });
         return;
       }
       workspace = archivedWorkspace;
@@ -385,7 +385,7 @@ export function executionWorkspaceRoutes(db: Db) {
     } else {
       const updatedWorkspace = await svc.update(id, patch);
       if (!updatedWorkspace) {
-        res.status(404).json({ error: "Execution workspace not found" });
+        res.status(404).json({ error: "执行 Workspace 未找到" });
         return;
       }
       workspace = updatedWorkspace;

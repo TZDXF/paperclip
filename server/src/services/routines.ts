@@ -132,11 +132,11 @@ function nextCronTickInTimeZone(expression: string, timeZone: string, after: Dat
 }
 
 function nextResultText(status: string, issueId?: string | null) {
-  if (status === "issue_created" && issueId) return `Created execution issue ${issueId}`;
-  if (status === "coalesced") return "Coalesced into an existing live execution issue";
-  if (status === "skipped") return "Skipped because a live execution issue already exists";
-  if (status === "completed") return "Execution issue completed";
-  if (status === "failed") return "Execution failed";
+  if (status === "issue_created" && issueId) return `已创建执行 Issue ${issueId}`;
+  if (status === "coalesced") return "已合并到现有的活跃执行 Issue";
+  if (status === "skipped") return "已跳过，因为已存在活跃执行 Issue";
+  if (status === "completed") return "执行 Issue 已完成";
+  if (status === "failed") return "执行失败";
   return status;
 }
 

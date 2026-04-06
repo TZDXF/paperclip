@@ -1,3 +1,5 @@
+import i18n from "@/i18n/index";
+
 export type AuthSession = {
   session: { id: string; userId: string };
   user: { id: string; email: string | null; name: string | null };
@@ -36,8 +38,8 @@ async function authPost(path: string, body: Record<string, unknown>) {
     const message =
       (payload as { error?: { message?: string } | string } | null)?.error &&
       typeof (payload as { error?: { message?: string } | string }).error === "object"
-        ? ((payload as { error?: { message?: string } }).error?.message ?? `Request failed: ${res.status}`)
-        : (payload as { error?: string } | null)?.error ?? `Request failed: ${res.status}`;
+        ? (payload as { error?: { message?: string } }).error?.message ?? i18n.t("errors.requestFailed", { statusCode: res.status })
+        : (payload as { error?: string } | null)?.error ?? i18n.t("errors.requestFailed", { statusCode: res.status });
     throw new Error(message);
   }
   return payload;
@@ -52,7 +54,7 @@ export const authApi = {
     if (res.status === 401) return null;
     const payload = await res.json().catch(() => null);
     if (!res.ok) {
-      throw new Error(`Failed to load session (${res.status})`);
+      throw new Error(i18n.t("errors.failedToLoadSession", { statusCode: res.status }));
     }
     const direct = toSession(payload);
     if (direct) return direct;

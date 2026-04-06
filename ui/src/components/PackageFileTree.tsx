@@ -149,20 +149,22 @@ export function parseFrontmatter(content: string): { data: FrontmatterData; body
   return Object.keys(data).length > 0 ? { data, body } : null;
 }
 
-export const FRONTMATTER_FIELD_LABELS: Record<string, string> = {
-  name: "Name",
-  title: "Title",
-  kind: "Kind",
-  reportsTo: "Reports to",
-  skills: "Skills",
-  status: "Status",
-  description: "Description",
-  priority: "Priority",
-  assignee: "Assignee",
-  project: "Project",
-  recurring: "Recurring",
-  targetDate: "Target date",
-};
+export function getFrontmatterFieldLabels(t: (key: string) => string): Record<string, string> {
+  return {
+    name: t("fileTree.name"),
+    title: t("fileTree.title"),
+    kind: t("fileTree.kind"),
+    reportsTo: t("fileTree.reportsTo"),
+    skills: t("fileTree.skills"),
+    status: t("fileTree.status"),
+    description: t("fileTree.description"),
+    priority: t("fileTree.priority"),
+    assignee: t("fileTree.assignee"),
+    project: t("fileTree.project"),
+    recurring: t("fileTree.recurring"),
+    targetDate: t("fileTree.targetDate"),
+  };
+}
 
 // ── File tree component ───────────────────────────────────────────────
 

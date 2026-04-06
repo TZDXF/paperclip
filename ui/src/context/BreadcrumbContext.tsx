@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 export interface Breadcrumb {
   label: string;
@@ -13,6 +14,7 @@ interface BreadcrumbContextValue {
 const BreadcrumbContext = createContext<BreadcrumbContextValue | null>(null);
 
 export function BreadcrumbProvider({ children }: { children: ReactNode }) {
+  const { t } = useTranslation();
   const [breadcrumbs, setBreadcrumbsState] = useState<Breadcrumb[]>([]);
 
   const setBreadcrumbs = useCallback((crumbs: Breadcrumb[]) => {
@@ -21,12 +23,12 @@ export function BreadcrumbProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (breadcrumbs.length === 0) {
-      document.title = "Paperclip";
+      document.title = t("common.paperclip");
     } else {
       const parts = [...breadcrumbs].reverse().map((b) => b.label);
-      document.title = `${parts.join(" · ")} · Paperclip`;
+      document.title = `${parts.join(" · ")} · ${t("common.paperclip")}`;
     }
-  }, [breadcrumbs]);
+  }, [breadcrumbs, t]);
 
   return (
     <BreadcrumbContext.Provider value={{ breadcrumbs, setBreadcrumbs }}>
