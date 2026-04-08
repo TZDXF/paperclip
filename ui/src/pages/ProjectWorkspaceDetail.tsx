@@ -33,10 +33,10 @@ type ProjectWorkspaceSourceType = ProjectWorkspace["sourceType"];
 type ProjectWorkspaceVisibility = ProjectWorkspace["visibility"];
 
 const SOURCE_TYPE_OPTIONS: Array<{ value: ProjectWorkspaceSourceType; label: string; description: string }> = [
-  { value: "local_path", label: "Local git checkout", description: "A local path Paperclip can use directly." },
-  { value: "non_git_path", label: "Local non-git path", description: "A local folder without git semantics." },
-  { value: "git_repo", label: "Remote git repo", description: "A repo URL with optional refs and local checkout." },
-  { value: "remote_managed", label: "Remote-managed workspace", description: "A hosted workspace tracked by external reference." },
+  { value: "local_path", label: "本地 Git 检出", description: "Paperclip 可直接使用的本地路径。" },
+  { value: "non_git_path", label: "本地非 Git 路径", description: "没有 Git 语义规则的本地文件夹。" },
+  { value: "git_repo", label: "远程 Git 仓库", description: "带有可选引用和本地检出的仓库 URL。" },
+  { value: "remote_managed", label: "远程托管工作区", description: "由外部引用跟踪的托管工作区。" },
 ];
 
 const VISIBILITY_OPTIONS: Array<{ value: ProjectWorkspaceVisibility; label: string }> = [
@@ -568,7 +568,7 @@ export function ProjectWorkspaceDetail() {
         <div className="space-y-6">
           <div className="rounded-2xl border border-border bg-card p-5">
             <div className="space-y-1">
-              <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">Workspace facts</div>
+              <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">{t("workspaceFacts")}</div>
               <h2 className="text-lg font-semibold">{t("pages.projectWorkspaceDetail.currentState")}</h2>
             </div>
             <Separator className="my-4" />
@@ -598,7 +598,7 @@ export function ProjectWorkspaceDetail() {
           <div className="rounded-2xl border border-border bg-card p-5">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="space-y-1">
-                <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">Runtime services</div>
+                <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">{t("runtimeServices")}</div>
                 <h2 className="text-lg font-semibold">{t("pages.projectWorkspaceDetail.attachedServices")}</h2>
                 <p className="text-sm text-muted-foreground">
                   {t("pages.projectWorkspaceDetail.attachedServicesDescription")}

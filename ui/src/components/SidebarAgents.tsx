@@ -19,7 +19,9 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import type { Agent } from "@paperclipai/shared";
+import { useTranslation } from "react-i18next";
 export function SidebarAgents() {
+  const { t } = useTranslation("ui");
   const [open, setOpen] = useState(true);
   const { selectedCompanyId } = useCompany();
   const { openNewAgent } = useDialog();
@@ -81,7 +83,7 @@ export function SidebarAgents() {
               )}
             />
             <span className="text-[10px] font-medium uppercase tracking-widest font-mono text-muted-foreground/60">
-              Agents
+              {t("ui.agents")}
             </span>
           </CollapsibleTrigger>
           <button

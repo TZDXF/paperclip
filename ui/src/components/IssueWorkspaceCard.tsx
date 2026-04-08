@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@/lib/router";
 import type { Issue, ExecutionWorkspace } from "@paperclipai/shared";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { executionWorkspacesApi } from "../api/execution-workspaces";
 import { instanceSettingsApi } from "../api/instanceSettings";
 import { useCompany } from "../context/CompanyContext";
@@ -192,6 +193,7 @@ export function IssueWorkspaceCard({
   onDraftChange,
 }: IssueWorkspaceCardProps) {
   const { selectedCompanyId } = useCompany();
+  const { t } = useTranslation("ui");
   const companyId = issue.companyId ?? selectedCompanyId;
   const [editing, setEditing] = useState(initialEditing);
 
@@ -346,7 +348,7 @@ export function IssueWorkspaceCard({
                 onClick={handleSave}
                 disabled={!canSaveWorkspaceConfig}
               >
-                Save
+                {t("ui.save")}
               </Button>
             </>
           ) : !livePreview ? (

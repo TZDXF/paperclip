@@ -177,7 +177,7 @@ function formatRunStatusLabel(status: string, tFn?: (key: string) => string) {
   }
   switch (status) {
     case "timed_out":
-      return "timed out";
+      return tFn ? tFn("ui.statusTimedOut") : "timed out";
     default:
       return status.replace(/_/g, " ");
   }

@@ -193,9 +193,10 @@ function ImportPreviewPane({
   action: string | null;
   renamedTo: string | null;
 }) {
+  const { t } = useTranslation();
   if (!selectedFile || content === null) {
     return (
-      <EmptyState icon={Package} message="Select a file to preview its contents." />
+      <EmptyState icon={Package} message={t("selectFileToPreview")} />
     );
   }
 
@@ -891,8 +892,8 @@ export function CompanyImport() {
     } catch (err) {
       pushToast({
         tone: "error",
-        title: "Package read failed",
-        body: err instanceof Error ? err.message : "Failed to read folder.",
+        title: t("ui.packageReadFailed"),
+        body: err instanceof Error ? err.message : t("ui.packageReadFailed"),
       });
     }
   }
@@ -1089,7 +1090,7 @@ export function CompanyImport() {
   const selectedAction = selectedFile ? (actionMap.get(selectedFile) ?? null) : null;
 
   if (!selectedCompanyId) {
-    return <EmptyState icon={Download} message="Select a company to import into." />;
+    return <EmptyState icon={Download} message={t("selectCompanyToImportInto")} />;
   }
 
   return (
@@ -1097,17 +1098,17 @@ export function CompanyImport() {
       {/* Source form section */}
       <div className="border-b border-border px-5 py-5 space-y-4">
         <div>
-          <h2 className="text-base font-semibold">Import source</h2>
+          <h2 className="text-base font-semibold">{t("importSource")}</h2>
           <p className="text-xs text-muted-foreground mt-1">
-            Choose a GitHub repo or upload a local Paperclip zip package.
+            {t("chooseGitHubOrZip")}
           </p>
         </div>
 
         <div className="grid gap-2 md:grid-cols-2">
           {(
             [
-              { key: "github", icon: Github, label: "GitHub repo" },
-              { key: "local", icon: Upload, label: "Local zip" },
+              { key: "github", icon: Github, label: "GitHub 仓库" },
+              { key: "local", icon: Upload, label: t("localZip") },
             ] as const
           ).map(({ key, icon: Icon, label }) => (
             <button
@@ -1213,8 +1214,8 @@ export function CompanyImport() {
         )}
 
         <Field
-          label="Collision strategy"
-          hint="Board imports can rename, skip, or replace matching company content."
+          label={t("collisionStrategy")}
+          hint={t("boardImportCollisionStrategy")}
         >
           <select
             className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
@@ -1224,9 +1225,9 @@ export function CompanyImport() {
               setImportPreview(null);
             }}
           >
-            <option value="rename">Rename on conflict</option>
-            <option value="skip">Skip on conflict</option>
-            <option value="replace">Replace existing</option>
+            <option value="rename">{t("renameOnConflict")}</option>
+            <option value="skip">{t("skipOnConflict")}</option>
+            <option value="replace">{t("replaceExisting")}</option>
           </select>
         </Field>
 
@@ -1237,7 +1238,7 @@ export function CompanyImport() {
             onClick={() => previewMutation.mutate()}
             disabled={previewMutation.isPending || !hasSource}
           >
-            {previewMutation.isPending ? "Previewing..." : "Preview import"}
+            {previewMutation.isPending ? t("previewingImport") : t("previewImport")}
           </Button>
         </div>
       </div>
@@ -1325,7 +1326,7 @@ export function CompanyImport() {
           <div className="grid h-[calc(100vh-16rem)] gap-0 xl:grid-cols-[19rem_minmax(0,1fr)]">
             <aside className="flex flex-col border-r border-border overflow-hidden">
               <div className="border-b border-border px-4 py-3 shrink-0">
-                <h2 className="text-base font-semibold">Package files</h2>
+                <h2 className="text-base font-semibold">{t("packageFiles")}</h2>
               </div>
               <div className="flex-1 overflow-y-auto">
                 <PackageFileTree

@@ -477,7 +477,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
               onClick={handleSave}
               disabled={!isCreate && props.isSaving}
             >
-              {!isCreate && props.isSaving ? "Saving..." : "Save"}
+              {!isCreate && props.isSaving ? t("ui.saving") : t("ui.save")}
             </Button>
           </div>
         </div>
@@ -641,7 +641,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
             <div className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs text-destructive">
               {testEnvironment.error instanceof Error
                 ? testEnvironment.error.message
-                : "Environment test failed"}
+                : t("ui.environmentTestFailed")}
             </div>
           )}
 
@@ -763,7 +763,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                 <p className="text-xs text-destructive">
                   {fetchedModelsError instanceof Error
                     ? fetchedModelsError.message
-                    : "Failed to load adapter models."}
+                    : t("ui.failedToLoadAdapterModels")}
                 </p>
               )}
 
@@ -987,8 +987,9 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
 }
 
 function AdapterEnvironmentResult({ result }: { result: AdapterEnvironmentTestResult }) {
+  const { t } = useTranslation();
   const statusLabel =
-    result.status === "pass" ? "Passed" : result.status === "warn" ? "Warnings" : "Failed";
+    result.status === "pass" ? t("ui.passed") : result.status === "warn" ? t("ui.warnings") : t("ui.failed");
   const statusClass =
     result.status === "pass"
       ? "text-green-700 dark:text-green-300 border-green-300 dark:border-green-500/40 bg-green-50 dark:bg-green-500/10"
@@ -1096,6 +1097,7 @@ function EnvVarEditor({
   onCreateSecret: (name: string, value: string) => Promise<CompanySecret>;
   onChange: (env: Record<string, EnvBinding> | undefined) => void;
 }) {
+  const { t } = useTranslation();
   type Row = {
     key: string;
     source: "plain" | "secret";
@@ -1250,7 +1252,7 @@ function EnvVarEditor({
         secretId: created.id,
       });
     } catch (err) {
-      setSealError(err instanceof Error ? err.message : "Failed to create secret");
+      setSealError(err instanceof Error ? err.message : t("ui.failedToCreateSecret"));
     }
   }
 

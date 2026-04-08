@@ -93,14 +93,14 @@ export function CompanySettings() {
     onSuccess: (_company, enabled) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.companies.all });
       pushToast({
-        title: enabled ? "Feedback sharing enabled" : "Feedback sharing disabled",
+        title: enabled ? t("companySettings.feedbackEnabled") : t("companySettings.feedbackDisabled"),
         tone: "success",
       });
     },
     onError: (err) => {
       pushToast({
-        title: t("companySettings:failedToUpdateFeedback"),
-        body: err instanceof Error ? err.message : "Unknown error",
+        title: t("companySettings.failedToUpdateFeedback"),
+        body: err instanceof Error ? err.message : t("ui.unknownError"),
         tone: "error",
       });
     },
@@ -154,7 +154,7 @@ export function CompanySettings() {
     },
     onError: (err) => {
       setInviteError(
-        err instanceof Error ? err.message : "Failed to create invite"
+        err instanceof Error ? err.message : t("companySettings.failedToCreateInvite")
       );
     }
   });
@@ -233,7 +233,7 @@ export function CompanySettings() {
   if (!selectedCompany) {
     return (
       <div className="text-sm text-muted-foreground">
-        {t("companySettings:noCompanySelected")}
+        {t("companySettings.noCompanySelected")}
       </div>
     );
   }
@@ -250,16 +250,16 @@ export function CompanySettings() {
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center gap-2">
         <Settings className="h-5 w-5 text-muted-foreground" />
-        <h1 className="text-lg font-semibold">{t("companySettings:companySettings")}</h1>
+        <h1 className="text-lg font-semibold">{t("companySettings.companySettings")}</h1>
       </div>
 
       {/* General */}
       <div className="space-y-4">
         <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-          General
+          {t("companySettings.general")}
         </div>
         <div className="space-y-3 rounded-md border border-border px-4 py-4">
-          <Field label="Company name" hint="The display name for your company.">
+          <Field label={t("companySettings.companyNameLabel")} hint={t("companySettings.companyNameHint")}>
             <input
               className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
               type="text"
@@ -268,14 +268,14 @@ export function CompanySettings() {
             />
           </Field>
           <Field
-            label={t("companySettings:descriptionLabel")}
-            hint={t("companySettings:descriptionHint")}
+            label={t("companySettings.descriptionLabel")}
+            hint={t("companySettings.descriptionHint")}
           >
             <input
               className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
               type="text"
               value={description}
-              placeholder={t("companySettings:descriptionPlaceholder")}
+              placeholder={t("companySettings.descriptionPlaceholder")}
               onChange={(e) => setDescription(e.target.value)}
             />
           </Field>
@@ -299,8 +299,8 @@ export function CompanySettings() {
             </div>
             <div className="flex-1 space-y-3">
               <Field
-                label={t("companySettings:logoLabel")}
-                hint={t("companySettings:logoHint")}
+                label={t("companySettings.logoLabel")}
+                hint={t("companySettings.logoHint")}
               >
                 <div className="space-y-2">
                   <input
@@ -317,7 +317,7 @@ export function CompanySettings() {
                         onClick={handleClearLogo}
                         disabled={clearLogoMutation.isPending}
                       >
-                        {clearLogoMutation.isPending ? "Removing..." : "Remove logo"}
+                        {clearLogoMutation.isPending ? t("companySettings.removing") : t("companySettings.removeLogo")}
                       </Button>
                     </div>
                   )}
@@ -335,13 +335,13 @@ export function CompanySettings() {
                     </span>
                   )}
                   {logoUploadMutation.isPending && (
-                    <span className="text-xs text-muted-foreground">{t("companySettings:uploadingLogo")}</span>
+                    <span className="text-xs text-muted-foreground">{t("companySettings.uploadingLogo")}</span>
                   )}
                 </div>
               </Field>
               <Field
-                label={t("companySettings:brandColorLabel")}
-                hint={t("companySettings:brandColorHint")}
+                label={t("companySettings.brandColorLabel")}
+                hint={t("companySettings.brandColorHint")}
               >
                 <div className="flex items-center gap-2">
                   <input
@@ -359,7 +359,7 @@ export function CompanySettings() {
                         setBrandColor(v);
                       }
                     }}
-                    placeholder={t("companySettings:autoPlaceholder")}
+                    placeholder={t("companySettings.autoPlaceholder")}
                     className="w-28 rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm font-mono outline-none"
                   />
                   {brandColor && (
@@ -369,7 +369,7 @@ export function CompanySettings() {
                       onClick={() => setBrandColor("")}
                       className="text-xs text-muted-foreground"
                     >
-                      {t("companySettings:clear")}
+                      {t("companySettings.clear")}
                     </Button>
                   )}
                 </div>
@@ -387,16 +387,16 @@ export function CompanySettings() {
             onClick={handleSaveGeneral}
             disabled={generalMutation.isPending || !companyName.trim()}
           >
-            {generalMutation.isPending ? "Saving..." : "Save changes"}
+            {generalMutation.isPending ? t("companySettings.saving") : t("companySettings.saveChanges")}
           </Button>
           {generalMutation.isSuccess && (
-            <span className="text-xs text-muted-foreground">{t("companySettings:saved")}</span>
+            <span className="text-xs text-muted-foreground">{t("companySettings.saved")}</span>
           )}
           {generalMutation.isError && (
             <span className="text-xs text-destructive">
               {generalMutation.error instanceof Error
                   ? generalMutation.error.message
-                  : t("companySettings:failedToSave")}
+                  : t("companySettings.failedToSave")}
             </span>
           )}
         </div>
@@ -405,12 +405,12 @@ export function CompanySettings() {
       {/* Hiring */}
       <div className="space-y-4" data-testid="company-settings-team-section">
         <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-          {t("companySettings:hiring")}
+          {t("companySettings.hiring")}
         </div>
         <div className="rounded-md border border-border px-4 py-3">
           <ToggleField
-            label={t("companySettings:requireBoardApproval")}
-            hint={t("companySettings:requireBoardApprovalHint")}
+            label={t("companySettings.requireBoardApproval")}
+            hint={t("companySettings.requireBoardApprovalHint")}
             checked={!!selectedCompany.requireBoardApprovalForNewAgents}
             onChange={(v) => settingsMutation.mutate(v)}
             toggleTestId="company-settings-team-approval-toggle"
@@ -420,31 +420,31 @@ export function CompanySettings() {
 
       <div className="space-y-4">
         <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-          {t("companySettings:feedbackSharing")}
+          {t("companySettings.feedbackSharing")}
         </div>
         <div className="space-y-3 rounded-md border border-border px-4 py-4">
           <ToggleField
-            label={t("companySettings:allowSharingVotes")}
-            hint={t("companySettings:allowSharingVotesHint")}
+            label={t("companySettings.allowSharingVotes")}
+            hint={t("companySettings.allowSharingVotesHint")}
             checked={!!selectedCompany.feedbackDataSharingEnabled}
             onChange={(enabled) => feedbackSharingMutation.mutate(enabled)}
           />
           <p className="text-sm text-muted-foreground">
-            {t("companySettings:feedbackVotesSavedLocally")}
+            {t("companySettings.feedbackVotesSavedLocally")}
           </p>
           <div className="space-y-1 text-xs text-muted-foreground">
             <div>
-              {t("companySettings:termsVersion", { version: selectedCompany.feedbackDataSharingTermsVersion ?? DEFAULT_FEEDBACK_DATA_SHARING_TERMS_VERSION })}
+              {t("companySettings.termsVersion", { version: selectedCompany.feedbackDataSharingTermsVersion ?? DEFAULT_FEEDBACK_DATA_SHARING_TERMS_VERSION })}
             </div>
             {selectedCompany.feedbackDataSharingConsentAt ? (
               <div>
-                {t("companySettings:enabledAt", { date: new Date(selectedCompany.feedbackDataSharingConsentAt).toLocaleString() })}
+                {t("companySettings.enabledAt", { date: new Date(selectedCompany.feedbackDataSharingConsentAt).toLocaleString() })}
                 {selectedCompany.feedbackDataSharingConsentByUserId
                   ? ` by ${selectedCompany.feedbackDataSharingConsentByUserId}`
                   : ""}
               </div>
             ) : (
-              <div>{t("companySettings:sharingDisabled")}</div>
+              <div>{t("companySettings.sharingDisabled")}</div>
             )}
             {FEEDBACK_TERMS_URL ? (
               <a
@@ -453,7 +453,7 @@ export function CompanySettings() {
                 rel="noreferrer"
                 className="inline-flex text-foreground underline underline-offset-4"
               >
-                {t("companySettings:readOurTerms")}
+                {t("companySettings.readOurTerms")}
               </a>
             ) : null}
           </div>
@@ -463,14 +463,14 @@ export function CompanySettings() {
       {/* Invites */}
       <div className="space-y-4" data-testid="company-settings-invites-section">
         <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-          {t("companySettings:invites")}
+          {t("companySettings.invites")}
         </div>
         <div className="space-y-3 rounded-md border border-border px-4 py-4">
           <div className="flex items-center gap-1.5">
             <span className="text-xs text-muted-foreground">
-              {t("companySettings:generateOpenClawSnippet")}
+              {t("companySettings.generateOpenClawSnippet")}
             </span>
-            <HintIcon text={t("companySettings:generateOpenClawSnippetHint")} />
+            <HintIcon text={t("companySettings.generateOpenClawSnippetHint")} />
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Button
@@ -480,8 +480,8 @@ export function CompanySettings() {
               disabled={inviteMutation.isPending}
             >
               {inviteMutation.isPending
-                ? t("companySettings:generating")
-                : t("companySettings:generateOpenClawInvitePrompt")}
+                ? t("companySettings.generating")
+                : t("companySettings.generateOpenClawInvitePrompt")}
             </Button>
           </div>
           {inviteError && (
@@ -494,7 +494,7 @@ export function CompanySettings() {
             >
               <div className="flex items-center justify-between gap-2">
                 <div className="text-xs text-muted-foreground">
-                  {t("companySettings:openClawInvitePrompt")}
+                  {t("companySettings.openClawInvitePrompt")}
                 </div>
                 {snippetCopied && (
                   <span
@@ -502,7 +502,7 @@ export function CompanySettings() {
                     className="flex items-center gap-1 text-xs text-green-600 animate-pulse"
                   >
                     <Check className="h-3 w-3" />
-                    {t("companySettings:copied")}
+                    {t("companySettings.copied")}
                   </span>
                 )}
               </div>
@@ -529,7 +529,7 @@ export function CompanySettings() {
                       }
                     }}
                   >
-                    {snippetCopied ? t("companySettings:copiedSnippet") : t("companySettings:copySnippet")}
+                    {snippetCopied ? t("companySettings.copiedSnippet") : t("companySettings.copySnippet")}
                   </Button>
                 </div>
               </div>
@@ -541,11 +541,11 @@ export function CompanySettings() {
       {/* Import / Export */}
       <div className="space-y-4">
         <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-          {t("companySettings:companyPackages")}
+          {t("companySettings.companyPackages")}
         </div>
         <div className="rounded-md border border-border px-4 py-4">
           <p className="text-sm text-muted-foreground">
-            {t("companySettings:importExportMoved", {
+            {t("companySettings.importExportMoved", {
               link: <a href="/org" className="underline hover:text-foreground">Org Chart</a>,
             })}
           </p>
@@ -553,13 +553,13 @@ export function CompanySettings() {
             <Button size="sm" variant="outline" asChild>
               <a href="/company/export">
                 <Download className="mr-1.5 h-3.5 w-3.5" />
-                {t("companySettings:export")}
+                {t("companySettings.export")}
               </a>
             </Button>
             <Button size="sm" variant="outline" asChild>
               <a href="/company/import">
                 <Upload className="mr-1.5 h-3.5 w-3.5" />
-                {t("companySettings:import")}
+                {t("companySettings.import")}
               </a>
             </Button>
           </div>
@@ -569,11 +569,11 @@ export function CompanySettings() {
       {/* Danger Zone */}
       <div className="space-y-4">
         <div className="text-xs font-medium text-destructive uppercase tracking-wide">
-          {t("companySettings:dangerZone")}
+          {t("companySettings.dangerZone")}
         </div>
         <div className="space-y-3 rounded-md border border-destructive/40 bg-destructive/5 px-4 py-4">
           <p className="text-sm text-muted-foreground">
-            {t("companySettings:archiveCompanyWarning")}
+            {t("companySettings.archiveCompanyWarning")}
           </p>
           <div className="flex items-center gap-2">
             <Button
@@ -586,7 +586,7 @@ export function CompanySettings() {
               onClick={() => {
                 if (!selectedCompanyId) return;
                 const confirmed = window.confirm(
-                  t("companySettings:archiveConfirm", { name: selectedCompany.name })
+                  t("companySettings.archiveConfirm", { name: selectedCompany.name })
                 );
                 if (!confirmed) return;
                 const nextCompanyId =
@@ -602,16 +602,16 @@ export function CompanySettings() {
               }}
             >
               {archiveMutation.isPending
-                ? t("companySettings:archiving")
+                ? t("companySettings.archiving")
                 : selectedCompany.status === "archived"
-                ? t("companySettings:alreadyArchived")
-                : t("companySettings:archiveCompany")}
+                ? t("companySettings.alreadyArchived")
+                : t("companySettings.archiveCompany")}
             </Button>
             {archiveMutation.isError && (
               <span className="text-xs text-destructive">
                 {archiveMutation.error instanceof Error
                   ? archiveMutation.error.message
-                  : t("companySettings:failedToArchiveCompany")}
+                  : t("companySettings.failedToArchiveCompany")}
               </span>
             )}
           </div>

@@ -35,8 +35,8 @@ export function InstanceSettings() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: t("instanceSettings:instanceSettings") },
-      { label: t("instanceSettings:heartbeats") },
+      { label: t("instanceSettings.instanceSettings") },
+      { label: t("instanceSettings.heartbeats") },
     ]);
   }, [setBreadcrumbs, t]);
 
@@ -75,7 +75,7 @@ export function InstanceSettings() {
       ]);
     },
     onError: (error) => {
-      setActionError(error instanceof Error ? error.message : "Failed to update heartbeat.");
+      setActionError(error instanceof Error ? error.message : t("instanceSettings.failedToUpdateHeartbeat"));
     },
   });
 
@@ -105,11 +105,11 @@ export function InstanceSettings() {
       const failures = results.filter((result): result is PromiseRejectedResult => result.status === "rejected");
       if (failures.length > 0) {
         const firstError = failures[0]?.reason;
-        const detail = firstError instanceof Error ? firstError.message : "Unknown error";
+        const detail = firstError instanceof Error ? firstError.message : t("instanceSettings.unknownError");
         throw new Error(
           failures.length === 1
-            ? `Failed to disable 1 timer heartbeat: ${detail}`
-            : `Failed to disable ${failures.length} of ${enabled.length} timer heartbeats. First error: ${detail}`,
+            ? t("instanceSettings.failedToDisableHeartbeats", { detail })
+            : t("instanceSettings.failedToDisableHeartbeatsCount", { count: failures.length, detail }),
         );
       }
       return enabled;
@@ -128,7 +128,7 @@ export function InstanceSettings() {
       ]);
     },
     onError: (error) => {
-      setActionError(error instanceof Error ? error.message : "Failed to disable all heartbeats.");
+      setActionError(error instanceof Error ? error.message : t("instanceSettings.failedToDisableAllHeartbeats"));
     },
   });
 
@@ -152,7 +152,7 @@ export function InstanceSettings() {
   }, [agents]);
 
   if (heartbeatsQuery.isLoading) {
-    return <div className="text-sm text-muted-foreground">{t("instanceSettings:loadingSchedulerHeartbeats")}</div>;
+    return <div className="text-sm text-muted-foreground">{t("instanceSettings.loadingSchedulerHeartbeats")}</div>;
   }
 
   if (heartbeatsQuery.error) {
@@ -160,7 +160,7 @@ export function InstanceSettings() {
       <div className="text-sm text-destructive">
         {heartbeatsQuery.error instanceof Error
           ? heartbeatsQuery.error.message
-          : t("instanceSettings:failedToLoadHeartbeats")}
+          : t("instanceSettings.failedToLoadHeartbeats")}
       </div>
     );
   }
@@ -170,17 +170,17 @@ export function InstanceSettings() {
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <Settings className="h-5 w-5 text-muted-foreground" />
-          <h1 className="text-lg font-semibold">{t("instanceSettings:schedulerHeartbeats")}</h1>
+          <h1 className="text-lg font-semibold">{t("instanceSettings.schedulerHeartbeats")}</h1>
         </div>
         <p className="text-sm text-muted-foreground">
-          {t("instanceSettings:heartbeatsDescription")}
+          {t("instanceSettings.heartbeatsDescription")}
         </p>
       </div>
 
       <div className="flex items-center gap-4 text-sm text-muted-foreground">
-        <span><span className="font-semibold text-foreground">{activeCount}</span> {t("instanceSettings:active")}</span>
-        <span><span className="font-semibold text-foreground">{disabledCount}</span> {t("instanceSettings:disabled")}</span>
-        <span><span className="font-semibold text-foreground">{grouped.length}</span> {grouped.length === 1 ? t("instanceSettings:company") : t("instanceSettings:companies")}</span>
+        <span><span className="font-semibold text-foreground">{activeCount}</span> {t("instanceSettings.active")}</span>
+        <span><span className="font-semibold text-foreground">{disabledCount}</span> {t("instanceSettings.disabled")}</span>
+        <span><span className="font-semibold text-foreground">{grouped.length}</span> {grouped.length === 1 ? t("instanceSettings.company") : t("instanceSettings.companies")}</span>
         {anyEnabled && (
           <Button
             variant="destructive"
@@ -188,14 +188,14 @@ export function InstanceSettings() {
             className="ml-auto h-7 text-xs"
             disabled={disableAllMutation.isPending}
             onClick={() => {
-              const noun = enabledCount === 1 ? t("instanceSettings:nounAgent") : t("instanceSettings:nounAgents");
-              if (!window.confirm(t("instanceSettings:disableAllConfirm", { count: enabledCount, noun }))) {
+              const noun = enabledCount === 1 ? t("instanceSettings.nounAgent") : t("instanceSettings.nounAgents");
+              if (!window.confirm(t("instanceSettings.disableAllConfirm", { count: enabledCount, noun }))) {
                 return;
               }
               disableAllMutation.mutate(agents);
             }}
           >
-            {disableAllMutation.isPending ? t("instanceSettings:disabling") : t("instanceSettings:disableAll")}
+            {disableAllMutation.isPending ? t("instanceSettings.disabling") : t("instanceSettings.disableAll")}
           </Button>
         )}
       </div>
@@ -209,7 +209,7 @@ export function InstanceSettings() {
       {agents.length === 0 ? (
         <EmptyState
           icon={Clock3}
-          message={t("instanceSettings:noSchedulerHeartbeats")}
+          message={t("instanceSettings.noSchedulerHeartbeats")}
         />
       ) : (
         <div className="space-y-4">
@@ -231,7 +231,7 @@ export function InstanceSettings() {
                           variant={agent.schedulerActive ? "default" : "outline"}
                           className="shrink-0 text-[10px] px-1.5 py-0"
                         >
-                          {agent.schedulerActive ? t("instanceSettings:on") : t("instanceSettings:off")}
+                          {agent.schedulerActive ? t("instanceSettings.on") : t("instanceSettings.off")}
                         </Badge>
                         <Link
                           to={buildAgentHref(agent)}
@@ -251,13 +251,13 @@ export function InstanceSettings() {
                         >
                           {agent.lastHeartbeatAt
                             ? relativeTime(agent.lastHeartbeatAt)
-                            : t("instanceSettings:never")}
+                            : t("instanceSettings.never")}
                         </span>
                         <span className="ml-auto flex items-center gap-1.5 shrink-0">
                           <Link
                             to={buildAgentHref(agent)}
                             className="text-muted-foreground hover:text-foreground"
-                            title={t("instanceSettings:fullAgentConfig")}
+                            title={t("instanceSettings.fullAgentConfig")}
                           >
                             <ExternalLink className="h-3.5 w-3.5" />
                           </Link>
@@ -268,7 +268,7 @@ export function InstanceSettings() {
                             disabled={saving}
                             onClick={() => toggleMutation.mutate(agent)}
                           >
-                            {saving ? "..." : agent.heartbeatEnabled ? t("instanceSettings:disableTimerHeartbeat") : t("instanceSettings:enableTimerHeartbeat")}
+                            {saving ? "..." : agent.heartbeatEnabled ? t("instanceSettings.disableTimerHeartbeat") : t("instanceSettings.enableTimerHeartbeat")}
                           </Button>
                         </span>
                       </div>

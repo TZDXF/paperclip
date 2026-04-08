@@ -113,34 +113,34 @@ function FinanceSummaryCard({
   return (
     <Card>
       <CardHeader className="px-5 pt-5 pb-2">
-        <CardTitle className="text-base">{t("costs:financeLedger")}</CardTitle>
+        <CardTitle className="text-base">{t("costs.financeLedger")}</CardTitle>
         <CardDescription>
-          {t("costs:financeLedgerDescription")}
+          {t("costs.financeLedgerDescription")}
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-3 px-5 pb-5 pt-2 sm:grid-cols-2 xl:grid-cols-4">
         <MetricTile
-          label={t("costs:debits")}
+          label={t("costs.debits")}
           value={formatCents(debitCents)}
           subtitle={t("costs:debitsSubtitle", { count: eventCount })}
           icon={ArrowUpRight}
         />
         <MetricTile
-          label={t("costs:credits")}
+          label={t("costs.credits")}
           value={formatCents(creditCents)}
-          subtitle={t("costs:creditsSubtitle")}
+          subtitle={t("costs.creditsSubtitle")}
           icon={ArrowDownLeft}
         />
         <MetricTile
-          label={t("costs:net")}
+          label={t("costs.net")}
           value={formatCents(netCents)}
-          subtitle={t("costs:netSubtitle")}
+          subtitle={t("costs.netSubtitle")}
           icon={ReceiptText}
         />
         <MetricTile
-          label={t("costs:estimated")}
+          label={t("costs.estimated")}
           value={formatCents(estimatedDebitCents)}
-          subtitle={t("costs:estimatedSubtitle")}
+          subtitle={t("costs.estimatedSubtitle")}
           icon={Coins}
         />
       </CardContent>
@@ -172,7 +172,7 @@ export function Costs() {
   } = useDateRange();
 
   useEffect(() => {
-    setBreadcrumbs([{ label: t("costs:breadcrumb") }]);
+    setBreadcrumbs([{ label: t("costs.breadcrumb") }]);
   }, [setBreadcrumbs, t]);
 
   const [today, setToday] = useState(() => new Date().toDateString());
@@ -468,7 +468,7 @@ export function Costs() {
         value: "all",
         label: (
           <span className="flex items-center gap-1.5">
-            <span>{t("costs:allProviders")}</span>
+            <span>{t("costs.allProviders")}</span>
             {providerKeys.length > 0 ? (
               <>
                 <span className="font-mono text-xs text-muted-foreground">{formatTokens(allTokens)}</span>
@@ -500,7 +500,7 @@ export function Costs() {
         value: "all",
         label: (
           <span className="flex items-center gap-1.5">
-            <span>{t("costs:allBillers")}</span>
+            <span>{t("costs.allBillers")}</span>
             {billerKeys.length > 0 ? (
               <>
                 <span className="font-mono text-xs text-muted-foreground">{formatTokens(allTokens)}</span>
@@ -533,7 +533,7 @@ export function Costs() {
   }), [budgetPolicies]);
 
   if (!selectedCompanyId) {
-    return <EmptyState icon={DollarSign} message={t("costs:selectCompany")} />;
+    return <EmptyState icon={DollarSign} message={t("costs.selectCompany")} />;
   }
 
   const showCustomPrompt = preset === "custom" && !customReady;
@@ -545,9 +545,9 @@ export function Costs() {
       <div className="space-y-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
-                <h1 className="text-3xl font-semibold tracking-tight">{t("costs:breadcrumb")}</h1>
+                <h1 className="text-3xl font-semibold tracking-tight">{t("costs.breadcrumb")}</h1>
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
-                  Inference spend, platform fees, credits, and live quota windows.
+                  {t("costs.inferenceSpendDescription")}
                 </p>
             </div>
 
@@ -573,7 +573,7 @@ export function Costs() {
                 onChange={(event) => setCustomFrom(event.target.value)}
                 className="h-9 rounded-md border border-input bg-background px-3 text-sm text-foreground"
               />
-              <span className="text-sm text-muted-foreground">to</span>
+              <span className="text-sm text-muted-foreground">{t("costs.dateRangeTo")}</span>
               <input
                 type="date"
                 value={customTo}
@@ -585,37 +585,37 @@ export function Costs() {
 
           <div className="grid gap-3 lg:grid-cols-4">
             <MetricTile
-              label={t("costs:inferenceSpend")}
+              label={t("costs.inferenceSpend")}
               value={formatCents(spendData?.summary.spendCents ?? 0)}
               subtitle={(t as (key: string, opts?: Record<string, unknown>) => string)("costs:tokensInRange", { count: formatTokens(inferenceTokenTotal) })}
               icon={DollarSign}
             />
             <MetricTile
-              label={t("costs:budget")}
+              label={t("costs.budget")}
               value={activeBudgetIncidents.length > 0 ? String(activeBudgetIncidents.length) : (
                 spendData?.summary.budgetCents && spendData.summary.budgetCents > 0
                   ? `${spendData.summary.utilizationPercent}%`
-                  : "Open"
+                  : t("costs.open")
               )}
               subtitle={
                 activeBudgetIncidents.length > 0
-                  ? `${budgetData?.pausedAgentCount ?? 0} agents paused · ${budgetData?.pausedProjectCount ?? 0} projects paused`
+                  ? t("costs.agentsPausedProjectsPaused", { agents: budgetData?.pausedAgentCount ?? 0, projects: budgetData?.pausedProjectCount ?? 0 })
                   : spendData?.summary.budgetCents && spendData.summary.budgetCents > 0
-                    ? `${formatCents(spendData.summary.spendCents)} of ${formatCents(spendData.summary.budgetCents)}`
-                    : t("costs:budgetDescriptionOpen")
+                    ? t("costs.ofBudget", { spend: formatCents(spendData.summary.spendCents), budget: formatCents(spendData.summary.budgetCents) })
+                    : t("costs.budgetDescriptionOpen")
               }
               icon={Coins}
             />
             <MetricTile
-              label={t("costs:financeNet")}
+              label={t("costs.financeNet")}
               value={formatCents(financeData?.summary.netCents ?? 0)}
-              subtitle={`${formatCents(financeData?.summary.debitCents ?? 0)} debits · ${formatCents(financeData?.summary.creditCents ?? 0)} credits`}
+              subtitle={t("costs.debitsCredits", { debits: formatCents(financeData?.summary.debitCents ?? 0), credits: formatCents(financeData?.summary.creditCents ?? 0) })}
               icon={ReceiptText}
             />
             <MetricTile
-              label={t("costs:financeEvents")}
+              label={t("costs.financeEvents")}
               value={String(financeData?.summary.eventCount ?? 0)}
-              subtitle={`${formatCents(financeData?.summary.estimatedDebitCents ?? 0)} estimated in range`}
+              subtitle={t("costs.estimatedInRange", { amount: formatCents(financeData?.summary.estimatedDebitCents ?? 0) })}
               icon={ArrowUpRight}
             />
           </div>
@@ -623,16 +623,16 @@ export function Costs() {
 
       <Tabs value={mainTab} onValueChange={(value) => setMainTab(value as typeof mainTab)}>
         <TabsList variant="line" className="justify-start">
-          <TabsTrigger value="overview">{t("costs:overview")}</TabsTrigger>
-          <TabsTrigger value="budgets">{t("costs:budgets")}</TabsTrigger>
-          <TabsTrigger value="providers">{t("costs:providers")}</TabsTrigger>
-          <TabsTrigger value="billers">{t("costs:billers")}</TabsTrigger>
-          <TabsTrigger value="finance">{t("costs:finance")}</TabsTrigger>
+          <TabsTrigger value="overview">{t("costs.overview")}</TabsTrigger>
+          <TabsTrigger value="budgets">{t("costs.budgets")}</TabsTrigger>
+          <TabsTrigger value="providers">{t("costs.providers")}</TabsTrigger>
+          <TabsTrigger value="billers">{t("costs.billers")}</TabsTrigger>
+          <TabsTrigger value="finance">{t("costs.finance")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="mt-4 space-y-4">
           {showCustomPrompt ? (
-            <p className="text-sm text-muted-foreground">{t("costs:selectStartEndDate")}</p>
+            <p className="text-sm text-muted-foreground">{t("costs.selectStartEndDate")}</p>
           ) : showOverviewLoading ? (
             <PageSkeleton variant="costs" />
           ) : overviewError ? (
@@ -661,9 +661,9 @@ export function Costs() {
               <div className="grid gap-4 xl:grid-cols-[1.3fr,1fr]">
                 <Card>
                   <CardHeader className="px-5 pt-5 pb-2">
-                    <CardTitle className="text-base">{t("costs:inferenceLedger")}</CardTitle>
+                    <CardTitle className="text-base">{t("costs.inferenceLedger")}</CardTitle>
                     <CardDescription>
-                      {t("costs:inferenceLedgerDescription")}
+                      {t("costs.inferenceLedgerDescription")}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4 px-5 pb-5 pt-2">
@@ -675,11 +675,11 @@ export function Costs() {
                         <div className="mt-1 text-sm text-muted-foreground">
                           {spendData?.summary.budgetCents && spendData.summary.budgetCents > 0
                             ? t("costs:budgetOf", { amount: formatCents(spendData.summary.budgetCents) })
-                            : t("costs:unlimitedBudget")}
+                            : t("costs.unlimitedBudget")}
                         </div>
                       </div>
                       <div className="border border-border px-4 py-3 text-right">
-                        <div className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">{t("costs:usage")}</div>
+                        <div className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">{t("costs.usage")}</div>
                         <div className="mt-1 text-lg font-medium tabular-nums">
                           {formatTokens(inferenceTokenTotal)}
                         </div>
@@ -701,7 +701,7 @@ export function Costs() {
                           />
                         </div>
                         <div className="text-xs text-muted-foreground">
-                          {spendData.summary.utilizationPercent}% {t("costs:utilizationNote")}
+                          {spendData.summary.utilizationPercent}% {t("costs.utilizationNote")}
                         </div>
                       </div>
                     ) : null}
@@ -720,12 +720,12 @@ export function Costs() {
               <div className="grid gap-4 xl:grid-cols-[1.25fr,0.95fr]">
                 <Card>
                   <CardHeader className="px-5 pt-5 pb-2">
-                    <CardTitle className="text-base">{t("costs:byAgent")}</CardTitle>
-                    <CardDescription>{t("costs:byAgentDescription")}</CardDescription>
+                    <CardTitle className="text-base">{t("costs.byAgent")}</CardTitle>
+                    <CardDescription>{t("costs.byAgentDescription")}</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-2 px-5 pb-5 pt-2">
                     {(spendData?.byAgent.length ?? 0) === 0 ? (
-                      <p className="text-sm text-muted-foreground">{t("costs:noCostEvents")}</p>
+                      <p className="text-sm text-muted-foreground">{t("costs.noCostEvents")}</p>
                     ) : (
                       spendData?.byAgent.map((row) => {
                         const modelRows = agentModelRows.get(row.agentId) ?? [];
@@ -751,15 +751,15 @@ export function Costs() {
                               <div className="text-right text-sm tabular-nums">
                                 <div className="font-medium">{formatCents(row.costCents)}</div>
                                 <div className="text-xs text-muted-foreground">
-                                  in {formatTokens(row.inputTokens + row.cachedInputTokens)} · out {formatTokens(row.outputTokens)}
+                                  {t("costs.tokenIn")} {formatTokens(row.inputTokens + row.cachedInputTokens)} · {t("costs.tokenOut")} {formatTokens(row.outputTokens)}
                                 </div>
                                 {(row.apiRunCount > 0 || row.subscriptionRunCount > 0) ? (
                                   <div className="text-xs text-muted-foreground">
-                                    {row.apiRunCount > 0 ? `${row.apiRunCount} api` : "0 api"}
+                                    {row.apiRunCount > 0 ? `${row.apiRunCount} ${t("costs.apiRun")}` : `0 ${t("costs.apiRun")}`}
                                     {" · "}
                                     {row.subscriptionRunCount > 0
-                                      ? `${row.subscriptionRunCount} subscription`
-                                      : "0 subscription"}
+                                      ? `${row.subscriptionRunCount} ${t("costs.subscriptionRun")}`
+                                      : `0 ${t("costs.subscriptionRun")}`}
                                   </div>
                                 ) : null}
                               </div>
@@ -790,7 +790,7 @@ export function Costs() {
                                           <span className="ml-1 font-normal text-muted-foreground">({sharePct}%)</span>
                                         </div>
                                         <div className="text-muted-foreground">
-                                          {formatTokens(modelRow.inputTokens + modelRow.cachedInputTokens + modelRow.outputTokens)} tok
+                                          {formatTokens(modelRow.inputTokens + modelRow.cachedInputTokens + modelRow.outputTokens)} {t("costs.tokAbbrev")}
                                         </div>
                                       </div>
                                     </div>
@@ -808,19 +808,19 @@ export function Costs() {
                 <div className="space-y-4">
                   <Card>
                     <CardHeader className="px-5 pt-5 pb-2">
-                      <CardTitle className="text-base">By project</CardTitle>
-                      <CardDescription>{t("costs:byProjectDescription")}</CardDescription>
+                      <CardTitle className="text-base">{t("costs.byProject")}</CardTitle>
+                      <CardDescription>{t("costs.byProjectDescription")}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-2 px-5 pb-5 pt-2">
                       {(spendData?.byProject.length ?? 0) === 0 ? (
-                        <p className="text-sm text-muted-foreground">{t("costs:noProjectAttributedCosts")}</p>
+                        <p className="text-sm text-muted-foreground">{t("costs.noProjectAttributedCosts")}</p>
                       ) : (
                         spendData?.byProject.map((row, index) => (
                           <div
                             key={row.projectId ?? `unattributed-${index}`}
                             className="flex items-center justify-between gap-3 border border-border px-3 py-2 text-sm"
                           >
-                            <span className="truncate">{row.projectName ?? row.projectId ?? "Unattributed"}</span>
+                            <span className="truncate">{row.projectName ?? row.projectId ?? t("costs.unattributed")}</span>
                             <span className="font-medium tabular-nums">{formatCents(row.costCents)}</span>
                           </div>
                         ))
@@ -828,7 +828,7 @@ export function Costs() {
                     </CardContent>
                   </Card>
 
-                  <FinanceTimelineCard rows={topFinanceEvents.slice(0, 6)} emptyMessage={t("costs:noFinanceEventsYet")} />
+                  <FinanceTimelineCard rows={topFinanceEvents.slice(0, 6)} emptyMessage={t("costs.noFinanceEventsYet")} />
                 </div>
               </div>
             </>
@@ -844,34 +844,34 @@ export function Costs() {
             <>
               <Card className="border-border/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))]">
                 <CardHeader className="px-5 pt-5 pb-3">
-                  <CardTitle className="text-base">{t("costs:budgetControlPlane")}</CardTitle>
+                  <CardTitle className="text-base">{t("costs.budgetControlPlane")}</CardTitle>
                   <CardDescription>
-                    {t("costs:budgetControlPlaneDescription")}
+                    {t("costs.budgetControlPlaneDescription")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-3 px-5 pb-5 pt-0 md:grid-cols-4">
                   <MetricTile
-                    label={t("costs:activeIncidents")}
+                    label={t("costs.activeIncidents")}
                     value={String(activeBudgetIncidents.length)}
-                    subtitle={t("costs:activeIncidentsSubtitle")}
+                    subtitle={t("costs.activeIncidentsSubtitle")}
                     icon={ReceiptText}
                   />
                   <MetricTile
-                    label={t("costs:pendingApprovals")}
+                    label={t("costs.pendingApprovals")}
                     value={String(budgetData?.pendingApprovalCount ?? 0)}
-                    subtitle={t("costs:pendingApprovalsSubtitle")}
+                    subtitle={t("costs.pendingApprovalsSubtitle")}
                     icon={ArrowUpRight}
                   />
                   <MetricTile
-                    label={t("costs:pausedAgents")}
+                    label={t("costs.pausedAgents")}
                     value={String(budgetData?.pausedAgentCount ?? 0)}
-                    subtitle={t("costs:pausedAgentsSubtitle")}
+                    subtitle={t("costs.pausedAgentsSubtitle")}
                     icon={Coins}
                   />
                   <MetricTile
-                    label={t("costs:pausedProjects")}
+                    label={t("costs.pausedProjects")}
                     value={String(budgetData?.pausedProjectCount ?? 0)}
-                    subtitle={t("costs:pausedProjectsSubtitle")}
+                    subtitle={t("costs.pausedProjectsSubtitle")}
                     icon={DollarSign}
                   />
                 </CardContent>
@@ -880,9 +880,9 @@ export function Costs() {
               {activeBudgetIncidents.length > 0 ? (
                 <div className="space-y-3">
                   <div>
-                    <h2 className="text-lg font-semibold">{t("costs:activeIncidentsTitle")}</h2>
+                    <h2 className="text-lg font-semibold">{t("costs.activeIncidentsTitle")}</h2>
                     <p className="text-sm text-muted-foreground">
-                      {t("costs:resolveActiveIncidents")}
+                      {t("costs.resolveActiveIncidents")}
                     </p>
                   </div>
                   <div className="grid gap-4 xl:grid-cols-2">
@@ -911,13 +911,19 @@ export function Costs() {
                   return (
                     <section key={scopeType} className="space-y-3">
                       <div>
-                        <h2 className="text-lg font-semibold capitalize">{scopeType} budgets</h2>
+                        <h2 className="text-lg font-semibold">
+                          {scopeType === "company"
+                            ? t("costs.companyBudgets")
+                            : scopeType === "agent"
+                              ? t("costs.agentBudgets")
+                              : t("costs.projectBudgets")}
+                        </h2>
                         <p className="text-sm text-muted-foreground">
                           {scopeType === "company"
-                            ? t("costs:companyBudgetDescription")
+                            ? t("costs.companyBudgetDescription")
                             : scopeType === "agent"
-                              ? t("costs:agentBudgetDescription")
-                              : t("costs:projectBudgetDescription")}
+                              ? t("costs.agentBudgetDescription")
+                              : t("costs.projectBudgetDescription")}
                         </p>
                       </div>
                       <div className="grid gap-4 xl:grid-cols-2">
@@ -943,7 +949,7 @@ export function Costs() {
                 {budgetPolicies.length === 0 ? (
                   <Card>
                     <CardContent className="px-5 py-8 text-sm text-muted-foreground">
-                      {t("costs:noBudgetPolicies")}
+                      {t("costs.noBudgetPolicies")}
                     </CardContent>
                   </Card>
                 ) : null}
@@ -954,7 +960,7 @@ export function Costs() {
 
         <TabsContent value="providers" className="mt-4 space-y-4">
           {showCustomPrompt ? (
-            <p className="text-sm text-muted-foreground">{t("costs:selectStartEndDate")}</p>
+            <p className="text-sm text-muted-foreground">{t("costs.selectStartEndDate")}</p>
           ) : (
             <>
               <Tabs value={effectiveProvider} onValueChange={setActiveProvider}>
@@ -962,7 +968,7 @@ export function Costs() {
 
                 <TabsContent value="all" className="mt-4">
                   {providers.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">{t("costs:noCostEventsInPeriod")}</p>
+                    <p className="text-sm text-muted-foreground">{t("costs.noCostEventsInPeriod")}</p>
                   ) : (
                     <div className="grid gap-4 md:grid-cols-2">
                       {providers.map((provider) => (
@@ -1009,7 +1015,7 @@ export function Costs() {
 
         <TabsContent value="billers" className="mt-4 space-y-4">
           {showCustomPrompt ? (
-            <p className="text-sm text-muted-foreground">{t("costs:selectStartEndDate")}</p>
+            <p className="text-sm text-muted-foreground">{t("costs.selectStartEndDate")}</p>
           ) : (
             <>
               <Tabs value={effectiveBiller} onValueChange={setActiveBiller}>
@@ -1017,7 +1023,7 @@ export function Costs() {
 
                 <TabsContent value="all" className="mt-4">
                   {billers.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">{t("costs:noBillableEvents")}</p>
+                    <p className="text-sm text-muted-foreground">{t("costs.noBillableEvents")}</p>
                   ) : (
                     <div className="grid gap-4 md:grid-cols-2">
                       {billers.map((biller) => {
@@ -1062,7 +1068,7 @@ export function Costs() {
 
         <TabsContent value="finance" className="mt-4 space-y-4">
           {showCustomPrompt ? (
-            <p className="text-sm text-muted-foreground">{t("costs:selectStartEndDate")}</p>
+            <p className="text-sm text-muted-foreground">{t("costs.selectStartEndDate")}</p>
           ) : financeLoading ? (
             <PageSkeleton variant="costs" />
           ) : financeError ? (
@@ -1081,12 +1087,12 @@ export function Costs() {
                 <div className="space-y-4">
                   <Card>
                     <CardHeader className="px-5 pt-5 pb-2">
-                      <CardTitle className="text-base">{t("costs:byBiller")}</CardTitle>
-                      <CardDescription>Account-level financial events grouped by who charged or credited them.</CardDescription>
+                      <CardTitle className="text-base">{t("costs.byBiller")}</CardTitle>
+                      <CardDescription>{t("costs.byBillerDescription")}</CardDescription>
                     </CardHeader>
                     <CardContent className="grid gap-4 px-5 pb-5 pt-2 md:grid-cols-2">
                       {(financeData?.byBiller.length ?? 0) === 0 ? (
-                        <p className="text-sm text-muted-foreground">{t("costs:noFinanceEvents")}</p>
+                        <p className="text-sm text-muted-foreground">{t("costs.noFinanceEvents")}</p>
                       ) : (
                         financeData?.byBiller.map((row) => <FinanceBillerCard key={row.biller} row={row} />)
                       )}

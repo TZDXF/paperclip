@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import type { Project } from "@paperclipai/shared";
 import { StatusBadge } from "./StatusBadge";
 import { cn, formatDate } from "../lib/utils";
@@ -116,8 +117,16 @@ function PropertyRow({
 }
 
 function ProjectStatusPicker({ status, onChange }: { status: string; onChange: (status: string) => void }) {
+  const { t } = useTranslation("ui");
   const [open, setOpen] = useState(false);
   const colorClass = statusBadge[status] ?? statusBadgeDefault;
+  const statuses = useMemo(() => [
+    { value: "backlog", label: t("ui.statusLabels.backlog") },
+    { value: "planned", label: "Planned" },
+    { value: "in_progress", label: t("ui.statusLabels.in_progress") },
+    { value: "completed", label: "Completed" },
+    { value: "cancelled", label: t("ui.statusLabels.cancelled") },
+  ], [t]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -132,7 +141,7 @@ function ProjectStatusPicker({ status, onChange }: { status: string; onChange: (
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-40 p-1" align="start">
-        {PROJECT_STATUSES.map((s) => (
+        {statuses.map((s) => (
           <Button
             key={s.value}
             variant="ghost"
@@ -218,6 +227,7 @@ function ArchiveDangerZone({
 
 export function ProjectProperties({ project, onUpdate, onFieldUpdate, getFieldSaveState, onArchive, archivePending }: ProjectPropertiesProps) {
   const { selectedCompanyId } = useCompany();
+  const { t } = useTranslation("ui");
   const queryClient = useQueryClient();
   const [goalOpen, setGoalOpen] = useState(false);
   const [executionWorkspaceAdvancedOpen, setExecutionWorkspaceAdvancedOpen] = useState(false);
@@ -789,7 +799,7 @@ export function ProjectProperties({ project, onUpdate, onFieldUpdate, getFieldSa
                   disabled={(!workspaceCwd.trim() && !primaryCodebaseWorkspace) || createWorkspace.isPending || updateWorkspace.isPending}
                   onClick={submitLocalWorkspace}
                 >
-                  Save
+                  {t("ui.save")}
                 </Button>
                 <Button
                   variant="ghost"
@@ -822,7 +832,7 @@ export function ProjectProperties({ project, onUpdate, onFieldUpdate, getFieldSa
                   disabled={(!workspaceRepoUrl.trim() && !primaryCodebaseWorkspace) || createWorkspace.isPending || updateWorkspace.isPending}
                   onClick={submitRepoWorkspace}
                 >
-                  Save
+                  {t("ui.save")}
                 </Button>
                 <Button
                   variant="ghost"
@@ -843,13 +853,13 @@ export function ProjectProperties({ project, onUpdate, onFieldUpdate, getFieldSa
             <p className="text-xs text-destructive">{workspaceError}</p>
           )}
           {createWorkspace.isError && (
-            <p className="text-xs text-destructive">Failed to save workspace.</p>
+            <p className="text-xs text-destructive">{t("projects.failedToSaveWorkspace")}</p>
           )}
           {removeWorkspace.isError && (
-            <p className="text-xs text-destructive">Failed to delete workspace.</p>
+            <p className="text-xs text-destructive">{t("projects.failedToDeleteWorkspace")}</p>
           )}
           {updateWorkspace.isError && (
-            <p className="text-xs text-destructive">Failed to update workspace.</p>
+            <p className="text-xs text-destructive">{t("projects.failedToUpdateWorkspace")}</p>
           )}
         </div>
 

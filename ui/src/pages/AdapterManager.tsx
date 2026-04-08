@@ -291,65 +291,65 @@ export function AdapterManager() {
   const [reinstallTarget, setReinstallTarget] = useState<AdapterInfo | null>(null);
 
   const labels = {
-    externalAdapters: t("pages:adapterManager.externalAdapters"),
-    builtinAdapters: t("pages:adapterManager.builtinAdapters"),
-    noExternalAdapters: t("pages:adapterManager.noExternalAdapters"),
-    noExternalAdaptersDesc: t("pages:adapterManager.noExternalAdaptersDesc"),
-    noBuiltinAdapters: t("pages:adapterManager.noBuiltinAdapters"),
-    adapters: t("pages:adapterManager.adapters"),
-    alpha: t("pages:adapterManager.alpha"),
-    installAdapter: t("pages:adapterManager.installAdapter"),
-    installExternalAdapter: t("pages:adapterManager.installExternalAdapter"),
-    installAdapterDescription: t("pages:adapterManager.installAdapterDescription"),
-    npmPackage: t("pages:adapterManager.npmPackage"),
-    localPath: t("pages:adapterManager.localPath"),
-    pathToAdapterPackage: t("pages:adapterManager.pathToAdapterPackage"),
-    pathToAdapterPackageNote: t("pages:adapterManager.pathToAdapterPackageNote"),
-    packageName: t("pages:adapterManager.packageName"),
-    version: t("pages:adapterManager.versionOptional"),
-    versionOptional: t("pages:adapterManager.versionOptional"),
-    cancel: t("pages:adapterManager.cancel"),
-    installing: t("pages:adapterManager.installing"),
-    install: t("pages:adapterManager.install"),
-    alphaNoticeTitle: t("pages:adapterManager.alphaNoticeTitle"),
-    alphaNoticeBody: t("pages:adapterManager.alphaNoticeBody"),
-    removeAdapterTitle: t("pages:adapterManager.removeAdapterTitle"),
-    remove: t("pages:adapterManager.remove"),
-    removing: t("pages:adapterManager.removing"),
-    pauseExternalOverride: t("pages:adapterManager.pauseExternalOverride"),
-    resumeExternalOverride: t("pages:adapterManager.resumeExternalOverride"),
-    loadingAdapters: t("pages:adapterManager.loadingAdapters"),
-    reinstallAdapterTitle: t("pages:adapterManager.reinstallAdapterTitle"),
-    reinstallAdapterBody: t("pages:adapterManager.reinstallAdapterDescription"),
-    package: t("pages:adapterManager.package"),
-    current: t("pages:adapterManager.current"),
-    latestOnNpm: t("pages:adapterManager.latestOnNpm"),
-    checking: t("pages:adapterManager.checking"),
-    unavailable: t("pages:adapterManager.unavailable"),
-    alreadyOnLatest: t("pages:adapterManager.alreadyOnLatest"),
-    reinstalling: t("pages:adapterManager.reinstalling"),
-    reinstall: t("pages:adapterManager.reinstall"),
+    externalAdapters: t("adapterManager.externalAdapters"),
+    builtinAdapters: t("adapterManager.builtinAdapters"),
+    noExternalAdapters: t("adapterManager.noExternalAdapters"),
+    noExternalAdaptersDesc: t("adapterManager.noExternalAdaptersDesc"),
+    noBuiltinAdapters: t("adapterManager.noBuiltinAdapters"),
+    adapters: t("adapterManager.adapters"),
+    alpha: t("adapterManager.alpha"),
+    installAdapter: t("adapterManager.installAdapter"),
+    installExternalAdapter: t("adapterManager.installExternalAdapter"),
+    installAdapterDescription: t("adapterManager.installAdapterDescription"),
+    npmPackage: t("adapterManager.npmPackage"),
+    localPath: t("adapterManager.localPath"),
+    pathToAdapterPackage: t("adapterManager.pathToAdapterPackage"),
+    pathToAdapterPackageNote: t("adapterManager.pathToAdapterPackageNote"),
+    packageName: t("adapterManager.packageName"),
+    version: t("adapterManager.versionOptional"),
+    versionOptional: t("adapterManager.versionOptional"),
+    cancel: t("adapterManager.cancel"),
+    installing: t("adapterManager.installing"),
+    install: t("adapterManager.install"),
+    alphaNoticeTitle: t("adapterManager.alphaNoticeTitle"),
+    alphaNoticeBody: t("adapterManager.alphaNoticeBody"),
+    removeAdapterTitle: t("adapterManager.removeAdapterTitle"),
+    remove: t("adapterManager.remove"),
+    removing: t("adapterManager.removing"),
+    pauseExternalOverride: t("adapterManager.pauseExternalOverride"),
+    resumeExternalOverride: t("adapterManager.resumeExternalOverride"),
+    loadingAdapters: t("adapterManager.loadingAdapters"),
+    reinstallAdapterTitle: t("adapterManager.reinstallAdapterTitle"),
+    reinstallAdapterBody: t("adapterManager.reinstallAdapterDescription"),
+    package: t("adapterManager.package"),
+    current: t("adapterManager.current"),
+    latestOnNpm: t("adapterManager.latestOnNpm"),
+    checking: t("adapterManager.checking"),
+    unavailable: t("adapterManager.unavailable"),
+    alreadyOnLatest: t("adapterManager.alreadyOnLatest"),
+    reinstalling: t("adapterManager.reinstalling"),
+    reinstall: t("adapterManager.reinstall"),
   };
 
   const adapterRowLabels = {
-    external: t("pages:adapterManager.external"),
-    builtin: t("pages:adapterManager.builtin"),
-    installedFromNpm: t("pages:adapterManager.installedFromNpm"),
-    installedFromLocalPath: t("pages:adapterManager.installedFromLocalPath"),
-    overridesBuiltin: t("pages:adapterManager.overridesBuiltin"),
-    hiddenFromMenus: t("pages:adapterManager.hiddenFromMenus"),
-    reinstallAdapter: t("pages:adapterManager.reinstallAdapter"),
-    reloadAdapter: t("pages:adapterManager.reloadAdapter"),
-    showInAgentMenus: t("pages:adapterManager.showInAgentMenus"),
-    hideFromAgentMenus: t("pages:adapterManager.hideFromAgentMenus"),
-    removeAdapter: t("pages:adapterManager.removeAdapter"),
-    modelsCount: t("pages:adapterManager.modelsCount", { count: 0 }).replace("0", "{{count}}"),
+    external: t("adapterManager.external"),
+    builtin: t("adapterManager.builtin"),
+    installedFromNpm: t("adapterManager.installedFromNpm"),
+    installedFromLocalPath: t("adapterManager.installedFromLocalPath"),
+    overridesBuiltin: t("adapterManager.overridesBuiltin"),
+    hiddenFromMenus: t("adapterManager.hiddenFromMenus"),
+    reinstallAdapter: t("adapterManager.reinstallAdapter"),
+    reloadAdapter: t("adapterManager.reloadAdapter"),
+    showInAgentMenus: t("adapterManager.showInAgentMenus"),
+    hideFromAgentMenus: t("adapterManager.hideFromAgentMenus"),
+    removeAdapter: t("adapterManager.removeAdapter"),
+    modelsCount: t("adapterManager.modelsCount", { count: 0 }).replace("0", "{{count}}"),
   };
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: selectedCompany?.name ?? t("common:company"), href: "/dashboard" },
-      { label: t("common:settings"), href: "/instance/settings/general" },
+      { label: selectedCompany?.name ?? t("common.company"), href: "/dashboard" },
+      { label: t("common.settings"), href: "/instance/settings/general" },
       { label: labels.adapters },
     ]);
   }, [selectedCompany?.name, setBreadcrumbs, t, labels.adapters]);
@@ -373,8 +373,8 @@ export function AdapterManager() {
       setInstallVersion("");
       setIsLocalPath(false);
       pushToast({
-        title: t("pages:adapterManager.adapterInstalled"),
-        body: t("pages:adapterManager.adapterRegistered", {
+        title: t("adapterManager.adapterInstalled"),
+        body: t("adapterManager.adapterRegistered", {
           type: result.type,
           version: result.version ? ` (v${result.version})` : "",
         }),
@@ -383,7 +383,7 @@ export function AdapterManager() {
     },
     onError: (err: Error) => {
       pushToast({
-        title: t("pages:adapterManager.installFailed"),
+        title: t("adapterManager.installFailed"),
         body: err.message,
         tone: "error",
       });
@@ -394,11 +394,11 @@ export function AdapterManager() {
     mutationFn: (type: string) => adaptersApi.remove(type),
     onSuccess: () => {
       invalidate();
-      pushToast({ title: t("pages:adapterManager.adapterRemoved"), tone: "success" });
+      pushToast({ title: t("adapterManager.adapterRemoved"), tone: "success" });
     },
     onError: (err: Error) => {
       pushToast({
-        title: t("pages:adapterManager.removalFailed"),
+        title: t("adapterManager.removalFailed"),
         body: err.message,
         tone: "error",
       });
@@ -413,7 +413,7 @@ export function AdapterManager() {
     },
     onError: (err: Error) => {
       pushToast({
-        title: t("pages:adapterManager.toggleFailed"),
+        title: t("adapterManager.toggleFailed"),
         body: err.message,
         tone: "error",
       });
@@ -428,7 +428,7 @@ export function AdapterManager() {
     },
     onError: (err: Error) => {
       pushToast({
-        title: t("pages:adapterManager.overrideToggleFailed"),
+        title: t("adapterManager.overrideToggleFailed"),
         body: err.message,
         tone: "error",
       });
@@ -442,8 +442,8 @@ export function AdapterManager() {
       invalidateDynamicParser(result.type);
       invalidateConfigSchemaCache(result.type);
       pushToast({
-        title: t("pages:adapterManager.adapterReloaded"),
-        body: t("pages:adapterManager.adapterReloadedDetail", {
+        title: t("adapterManager.adapterReloaded"),
+        body: t("adapterManager.adapterReloadedDetail", {
           type: result.type,
           version: result.version ? ` (v${result.version})` : "",
         }),
@@ -452,7 +452,7 @@ export function AdapterManager() {
     },
     onError: (err: Error) => {
       pushToast({
-        title: t("pages:adapterManager.reloadFailed"),
+        title: t("adapterManager.reloadFailed"),
         body: err.message,
         tone: "error",
       });
@@ -466,8 +466,8 @@ export function AdapterManager() {
       invalidateDynamicParser(result.type);
       invalidateConfigSchemaCache(result.type);
       pushToast({
-        title: t("pages:adapterManager.adapterReinstalled"),
-        body: t("pages:adapterManager.adapterUpdatedFromNpm", {
+        title: t("adapterManager.adapterReinstalled"),
+        body: t("adapterManager.adapterUpdatedFromNpm", {
           type: result.type,
           version: result.version ? ` (v${result.version})` : "",
         }),
@@ -476,7 +476,7 @@ export function AdapterManager() {
     },
     onError: (err: Error) => {
       pushToast({
-        title: t("pages:adapterManager.reinstallFailed"),
+        title: t("adapterManager.reinstallFailed"),
         body: err.message,
         tone: "error",
       });
@@ -685,7 +685,7 @@ export function AdapterManager() {
                   isReinstalling={reinstallMutation.isPending}
                   toggleTitleDisabled={isBuiltinOverride ? labels.pauseExternalOverride : undefined}
                   toggleTitleEnabled={isBuiltinOverride ? labels.resumeExternalOverride : undefined}
-                  disabledBadgeLabel={isBuiltinOverride ? t("pages:adapterManager.overridePaused") : undefined}
+                  disabledBadgeLabel={isBuiltinOverride ? t("adapterManager.overridePaused") : undefined}
                   labels={adapterRowLabels}
                 />
               );
@@ -748,7 +748,7 @@ export function AdapterManager() {
           <DialogHeader>
             <DialogTitle>{labels.removeAdapterTitle}</DialogTitle>
             <DialogDescription>
-              {t("pages:adapterManager.removeAdapterBody", {
+              {t("adapterManager.removeAdapterBody", {
                 type: removeType ?? "",
                 npmCleanup: (removeType && adapters?.find((a) => a.type === removeType)?.packageName)
                   ? " npm packages will be cleaned up from disk."

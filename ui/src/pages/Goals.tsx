@@ -19,7 +19,7 @@ export function Goals() {
   const { t } = useTranslation("pages");
 
   useEffect(() => {
-    setBreadcrumbs([{ label: t("goals:breadcrumb") }]);
+    setBreadcrumbs([{ label: t("goals.breadcrumb") }]);
   }, [setBreadcrumbs, t]);
 
   const { data: goals, isLoading, error } = useQuery({
@@ -29,7 +29,7 @@ export function Goals() {
   });
 
   if (!selectedCompanyId) {
-    return <EmptyState icon={Target} message={t("goals:selectCompany")} />;
+    return <EmptyState icon={Target} message={t("goals.selectCompany")} />;
   }
 
   if (isLoading) {
@@ -43,8 +43,8 @@ export function Goals() {
       {goals && goals.length === 0 && (
         <EmptyState
           icon={Target}
-          message={t("goals:noGoals")}
-          action={t("goals:addGoal")}
+          message={t("goals.noGoals")}
+          action={t("goals.addGoal")}
           onAction={() => openNewGoal()}
         />
       )}
@@ -54,7 +54,7 @@ export function Goals() {
           <div className="flex items-center justify-start">
             <Button size="sm" variant="outline" onClick={() => openNewGoal()}>
               <Plus className="h-3.5 w-3.5 mr-1.5" />
-              {t("goals:newGoal")}
+              {t("goals.newGoal")}
             </Button>
           </div>
           <GoalTree goals={goals} goalLink={(goal) => `/goals/${goal.id}`} />

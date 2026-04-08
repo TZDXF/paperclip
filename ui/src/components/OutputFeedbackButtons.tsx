@@ -10,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useTranslation } from "react-i18next";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { cn } from "../lib/utils";
 
@@ -28,6 +29,7 @@ export function OutputFeedbackButtons({
   onVote: (vote: FeedbackVoteValue, options?: { allowSharing?: boolean; reason?: string }) => Promise<void>;
   rightSlot?: React.ReactNode;
 }) {
+  const { t } = useTranslation("ui");
   const [pendingVote, setPendingVote] = useState<{
     vote: FeedbackVoteValue;
     reason?: string;
@@ -169,7 +171,7 @@ export function OutputFeedbackButtons({
                 });
               }}
             >
-              {isSaving ? "Saving..." : "Save note"}
+              {isSaving ? t("ui.saving") : t("ui.saveNote")}
             </Button>
           </div>
         </div>
@@ -197,9 +199,9 @@ export function OutputFeedbackButtons({
               This vote is always saved locally.
             </p>
             <p>
-              Choose <span className="font-medium text-foreground">Always allow</span> to share
+              Choose <span className="font-medium text-foreground">{t("ui.alwaysAllow")}</span> to share
               this vote and future voted AI outputs. Choose{" "}
-              <span className="font-medium text-foreground">Don't allow</span> to keep this vote
+              <span className="font-medium text-foreground">{t("ui.dontAllow")}</span> to keep this vote
               and future votes local.
             </p>
             <p>
@@ -233,7 +235,7 @@ export function OutputFeedbackButtons({
                 );
               }}
             >
-              {isSaving ? "Saving..." : "Don't allow"}
+              {isSaving ? t("ui.saving") : t("ui.dontAllow")}
             </Button>
             <Button
               type="button"
@@ -253,7 +255,7 @@ export function OutputFeedbackButtons({
                 );
               }}
             >
-              {isSaving ? "Saving..." : "Always allow"}
+              {isSaving ? t("ui.saving") : t("ui.alwaysAllow")}
             </Button>
           </DialogFooter>
         </DialogContent>

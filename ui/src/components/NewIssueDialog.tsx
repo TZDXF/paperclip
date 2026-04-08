@@ -277,6 +277,15 @@ export function NewIssueDialog() {
   const { companies, selectedCompanyId, selectedCompany } = useCompany();
   const queryClient = useQueryClient();
   const { pushToast } = useToast();
+
+  const translatedStatuses = useMemo(() => [
+    { value: "backlog", label: t("ui.statusLabels.backlog"), color: issueStatusText.backlog ?? issueStatusTextDefault },
+    { value: "todo", label: t("ui.statusLabels.todo"), color: issueStatusText.todo ?? issueStatusTextDefault },
+    { value: "in_progress", label: t("ui.statusLabels.in_progress"), color: issueStatusText.in_progress ?? issueStatusTextDefault },
+    { value: "in_review", label: t("ui.statusLabels.in_review"), color: issueStatusText.in_review ?? issueStatusTextDefault },
+    { value: "done", label: t("ui.statusLabels.done"), color: issueStatusText.done ?? issueStatusTextDefault },
+  ], [t]);
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("todo");
@@ -750,7 +759,7 @@ export function NewIssueDialog() {
   }
 
   const hasDraft = title.trim().length > 0 || description.trim().length > 0 || stagedFiles.length > 0;
-  const currentStatus = statuses.find((s) => s.value === status) ?? statuses[1]!;
+  const currentStatus = translatedStatuses.find((s) => s.value === status) ?? translatedStatuses[1]!;
   const currentPriority = priorities.find((p) => p.value === priority);
   const currentAssignee = selectedAssigneeAgentId
     ? (agents ?? []).find((a) => a.id === selectedAssigneeAgentId)
@@ -1333,7 +1342,7 @@ export function NewIssueDialog() {
               </button>
             </PopoverTrigger>
             <PopoverContent className="w-36 p-1" align="start">
-              {statuses.map((s) => (
+              {translatedStatuses.map((s) => (
                 <button
                   key={s.value}
                   className={cn(

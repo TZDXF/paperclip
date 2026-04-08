@@ -338,7 +338,7 @@ function ProjectWorkspacesContent({
                   status: summary.executionWorkspaceStatus!,
                 })}
               >
-                {summary.executionWorkspaceStatus === "cleanup_failed" ? "Retry close" : "Close"}
+                {summary.executionWorkspaceStatus === "cleanup_failed" ? t("retryClose") : t("close")}
               </Button>
             ) : null}
           </div>
@@ -854,11 +854,11 @@ export function ProjectDetail() {
       <Tabs value={activeTab ?? "list"} onValueChange={(value) => handleTabChange(value as ProjectTab)}>
         <PageTabBar
           items={[
-            { value: "list", label: "Issues" },
-            { value: "overview", label: "Overview" },
-            ...(showWorkspacesTab ? [{ value: "workspaces", label: "Workspaces" }] : []),
-            { value: "configuration", label: "Configuration" },
-            { value: "budget", label: "Budget" },
+            { value: "list", label: t("ui.issues") },
+            { value: "overview", label: t("projects.overview") || "Overview" },
+            ...(showWorkspacesTab ? [{ value: "workspaces", label: t("projects.workspaces") || "Workspaces" }] : []),
+            { value: "configuration", label: t("ui.configuration") },
+            { value: "budget", label: t("projects.budget") || "Budget" },
             ...pluginTabItems.map((item) => ({
               value: item.value,
               label: item.label,

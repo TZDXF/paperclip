@@ -20,7 +20,7 @@ export function NotFoundPage({ scope = "global", requestedPrefix }: NotFoundPage
   const { t } = useTranslation("pages");
 
   useEffect(() => {
-    setBreadcrumbs([{ label: t("notFound:notFound") }]);
+    setBreadcrumbs([{ label: t("notFound.notFound") }]);
   }, [setBreadcrumbs, t]);
 
   const fallbackCompany = selectedCompany ?? companies[0] ?? null;
@@ -28,11 +28,11 @@ export function NotFoundPage({ scope = "global", requestedPrefix }: NotFoundPage
   const currentPath = `${location.pathname}${location.search}${location.hash}`;
   const normalizedPrefix = requestedPrefix?.toUpperCase();
 
-  const title = scope === "invalid_company_prefix" ? t("notFound:companyNotFound") : t("notFound:pageNotFound");
+  const title = scope === "invalid_company_prefix" ? t("notFound.companyNotFound") : t("notFound.pageNotFound");
   const description =
     scope === "invalid_company_prefix"
       ? t("notFound:noCompanyPrefix", { prefix: normalizedPrefix ?? "unknown" })
-      : t("notFound:routeDoesNotExist");
+      : t("notFound.routeDoesNotExist");
 
   return (
     <div className="mx-auto max-w-2xl py-10">
@@ -55,11 +55,11 @@ export function NotFoundPage({ scope = "global", requestedPrefix }: NotFoundPage
           <Button asChild>
             <Link to={dashboardHref}>
               <Compass className="mr-1.5 h-4 w-4" />
-              {t("notFound:openDashboard")}
+              {t("notFound.openDashboard")}
             </Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link to="/">{t("notFound:goHome")}</Link>
+            <Link to="/">{t("notFound.goHome")}</Link>
           </Button>
         </div>
       </div>

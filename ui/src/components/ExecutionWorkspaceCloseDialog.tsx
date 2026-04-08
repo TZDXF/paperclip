@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ExecutionWorkspace } from "@paperclipai/shared";
 import { Link } from "@/lib/router";
 import { Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { executionWorkspacesApi } from "../api/execution-workspaces";
 import { useToast } from "../context/ToastContext";
 import { queryKeys } from "../lib/queryKeys";
@@ -45,7 +46,8 @@ export function ExecutionWorkspaceCloseDialog({
 }: ExecutionWorkspaceCloseDialogProps) {
   const queryClient = useQueryClient();
   const { pushToast } = useToast();
-  const actionLabel = currentStatus === "cleanup_failed" ? "Retry close" : "Close workspace";
+  const { t } = useTranslation("ui");
+  const actionLabel = currentStatus === "cleanup_failed" ? t("ui.retryClose") : t("ui.closeWorkspace");
 
   const readinessQuery = useQuery({
     queryKey: queryKeys.executionWorkspaces.closeReadiness(workspaceId),
@@ -67,8 +69,8 @@ export function ExecutionWorkspaceCloseDialog({
     },
     onError: (error) => {
       pushToast({
-        title: "Failed to close workspace",
-        body: error instanceof Error ? error.message : "Unknown error",
+        title: t("ui.failedToCloseWorkspace"),
+        body: error instanceof Error ? error.message : t("ui.unknownError"),
         tone: "error",
       });
     },

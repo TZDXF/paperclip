@@ -96,7 +96,7 @@ export function Org() {
   const { t } = useTranslation("pages");
 
   useEffect(() => {
-    setBreadcrumbs([{ label: t("org:breadcrumb") }]);
+    setBreadcrumbs([{ label: t("org.breadcrumb") }]);
   }, [setBreadcrumbs, t]);
 
   const { data, isLoading, error } = useQuery({
@@ -106,7 +106,7 @@ export function Org() {
   });
 
   if (!selectedCompanyId) {
-    return <EmptyState icon={GitBranch} message={t("org:selectCompany")} />;
+    return <EmptyState icon={GitBranch} message={t("org.selectCompany")} />;
   }
 
   if (isLoading) {
@@ -120,7 +120,7 @@ export function Org() {
       {data && data.length === 0 && (
         <EmptyState
           icon={GitBranch}
-          message={t("org:noAgentsInOrg")}
+          message={t("org.noAgentsInOrg")}
         />
       )}
 

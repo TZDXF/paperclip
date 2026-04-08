@@ -29,7 +29,7 @@ export function Activity() {
   const { t } = useTranslation("pages");
 
   useEffect(() => {
-    setBreadcrumbs([{ label: t("activity:breadcrumb") }]);
+    setBreadcrumbs([{ label: t("activity.breadcrumb") }]);
   }, [setBreadcrumbs, t]);
 
   const { data, isLoading, error } = useQuery({
@@ -84,7 +84,7 @@ export function Activity() {
   }, [issues]);
 
   if (!selectedCompanyId) {
-    return <EmptyState icon={History} message={t("activity:selectCompany")} />;
+    return <EmptyState icon={History} message={t("activity.selectCompany")} />;
   }
 
   if (isLoading) {
@@ -105,10 +105,10 @@ export function Activity() {
       <div className="flex items-center justify-end">
         <Select value={filter} onValueChange={setFilter}>
           <SelectTrigger className="w-[140px] h-8 text-xs">
-            <SelectValue placeholder={t("activity:filterByType")} />
+            <SelectValue placeholder={t("activity.filterByType")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{t("activity:allTypes")}</SelectItem>
+            <SelectItem value="all">{t("activity.allTypes")}</SelectItem>
             {entityTypes.map((type) => (
               <SelectItem key={type} value={type}>
                 {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -121,7 +121,7 @@ export function Activity() {
       {error && <p className="text-sm text-destructive">{error.message}</p>}
 
       {filtered && filtered.length === 0 && (
-        <EmptyState icon={History} message={t("activity:noActivity")} />
+        <EmptyState icon={History} message={t("activity.noActivity")} />
       )}
 
       {filtered && filtered.length > 0 && (

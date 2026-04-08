@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { NavLink, useLocation } from "@/lib/router";
+import { useTranslation } from "react-i18next";
 import {
   House,
   CircleDot,
@@ -38,13 +39,14 @@ export function MobileBottomNav({ visible }: MobileBottomNavProps) {
   const { selectedCompanyId } = useCompany();
   const { openNewIssue } = useDialog();
   const inboxBadge = useInboxBadge(selectedCompanyId);
+  const { t } = useTranslation("ui");
 
   const items = useMemo<MobileNavItem[]>(
     () => [
-      { type: "link", to: "/dashboard", label: "Home", icon: House },
-      { type: "link", to: "/issues", label: "Issues", icon: CircleDot },
-      { type: "action", label: "Create", icon: SquarePen, onClick: () => openNewIssue() },
-      { type: "link", to: "/agents/all", label: "Agents", icon: Users },
+      { type: "link", to: "/dashboard", label: t("ui.home"), icon: House },
+      { type: "link", to: "/issues", label: t("ui.issues"), icon: CircleDot },
+      { type: "action", label: t("ui.create"), icon: SquarePen, onClick: () => openNewIssue() },
+      { type: "link", to: "/agents/all", label: t("ui.agents"), icon: Users },
       {
         type: "link",
         to: "/inbox",

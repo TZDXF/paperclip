@@ -461,7 +461,7 @@ export function IssuesList({
                             <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-dashed border-muted-foreground/35 bg-muted/30">
                               <User className="h-3 w-3" />
                             </span>
-                            {formatAssigneeUserLabel(issue.assigneeUserId, currentUserId) ?? "User"}
+                            {formatAssigneeUserLabel(issue.assigneeUserId, currentUserId) ?? t("issues.user")}
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">

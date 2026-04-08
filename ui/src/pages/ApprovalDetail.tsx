@@ -67,8 +67,8 @@ export function ApprovalDetail() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: t("approvals:breadcrumb") ?? "Approvals", href: "/approvals" },
-      { label: approval?.id?.slice(0, 8) ?? approvalId ?? t("approvalDetail:breadcrumb") },
+      { label: t("approvals.breadcrumb") ?? "Approvals", href: "/approvals" },
+      { label: approval?.id?.slice(0, 8) ?? approvalId ?? t("approvalDetail.breadcrumb") },
     ]);
   }, [setBreadcrumbs, approval, approvalId, t]);
 
@@ -93,7 +93,7 @@ export function ApprovalDetail() {
       refresh();
       navigate(`/approvals/${approvalId}?resolved=approved`, { replace: true });
     },
-    onError: (err) => setError(err instanceof Error ? err.message : t("approvalDetail:approveFailed")),
+    onError: (err) => setError(err instanceof Error ? err.message : t("approvalDetail.approveFailed")),
   });
 
   const rejectMutation = useMutation({
@@ -102,7 +102,7 @@ export function ApprovalDetail() {
       setError(null);
       refresh();
     },
-    onError: (err) => setError(err instanceof Error ? err.message : t("approvalDetail:rejectFailed")),
+    onError: (err) => setError(err instanceof Error ? err.message : t("approvalDetail.rejectFailed")),
   });
 
   const revisionMutation = useMutation({
@@ -111,7 +111,7 @@ export function ApprovalDetail() {
       setError(null);
       refresh();
     },
-    onError: (err) => setError(err instanceof Error ? err.message : t("approvalDetail:revisionRequestFailed")),
+    onError: (err) => setError(err instanceof Error ? err.message : t("approvalDetail.revisionRequestFailed")),
   });
 
   const resubmitMutation = useMutation({
@@ -120,7 +120,7 @@ export function ApprovalDetail() {
       setError(null);
       refresh();
     },
-    onError: (err) => setError(err instanceof Error ? err.message : t("approvalDetail:resubmitFailed")),
+    onError: (err) => setError(err instanceof Error ? err.message : t("approvalDetail.resubmitFailed")),
   });
 
   const addCommentMutation = useMutation({
@@ -130,7 +130,7 @@ export function ApprovalDetail() {
       setError(null);
       refresh();
     },
-    onError: (err) => setError(err instanceof Error ? err.message : t("approvalDetail:commentFailed")),
+    onError: (err) => setError(err instanceof Error ? err.message : t("approvalDetail.commentFailed")),
   });
 
   const deleteAgentMutation = useMutation({
@@ -140,11 +140,11 @@ export function ApprovalDetail() {
       refresh();
       navigate("/approvals");
     },
-    onError: (err) => setError(err instanceof Error ? err.message : t("approvalDetail:deleteFailed")),
+    onError: (err) => setError(err instanceof Error ? err.message : t("approvalDetail.deleteFailed")),
   });
 
   if (isLoading) return <PageSkeleton variant="detail" />;
-  if (!approval) return <p className="text-sm text-muted-foreground">{t("approvalDetail:approvalNotFound")}</p>;
+  if (!approval) return <p className="text-sm text-muted-foreground">{t("approvalDetail.approvalNotFound")}</p>;
 
   const payload = approval.payload as Record<string, unknown>;
   const linkedAgentId = typeof payload.agentId === "string" ? payload.agentId : null;
@@ -158,17 +158,17 @@ export function ApprovalDetail() {
       ? {
           label:
             (linkedIssues?.length ?? 0) > 1
-              ? t("approvalDetail:reviewLinkedIssuesPlural")
-              : t("approvalDetail:reviewLinkedIssue"),
+              ? t("approvalDetail.reviewLinkedIssuesPlural")
+              : t("approvalDetail.reviewLinkedIssue"),
           to: `/issues/${primaryLinkedIssue.identifier ?? primaryLinkedIssue.id}`,
         }
       : linkedAgentId
         ? {
-            label: t("approvalDetail:openHiredAgent"),
+            label: t("approvalDetail.openHiredAgent"),
             to: `/agents/${linkedAgentId}`,
           }
         : {
-            label: t("approvalDetail:backToApprovals"),
+            label: t("approvalDetail.backToApprovals"),
             to: "/approvals",
           };
 
@@ -183,9 +183,9 @@ export function ApprovalDetail() {
                 <Sparkles className="h-3 w-3 text-green-500 dark:text-green-200 absolute -right-2 -top-1 animate-pulse" />
               </div>
               <div>
-                <p className="text-sm text-green-800 dark:text-green-100 font-medium">{t("approvalDetail:approvalConfirmed")}</p>
+                <p className="text-sm text-green-800 dark:text-green-100 font-medium">{t("approvalDetail.approvalConfirmed")}</p>
                 <p className="text-xs text-green-700 dark:text-green-200/90">
-                  {t("approvalDetail:reviewLinkedIssues")}
+                  {t("approvalDetail.reviewLinkedIssues")}
                 </p>
               </div>
             </div>
@@ -214,7 +214,7 @@ export function ApprovalDetail() {
         <div className="text-sm space-y-1">
           {approval.requestedByAgentId && (
             <div className="flex items-center gap-2">
-              <span className="text-muted-foreground text-xs">{t("approvalDetail:requestedBy")}</span>
+              <span className="text-muted-foreground text-xs">{t("approvalDetail.requestedBy")}</span>
               <Identity
                 name={agentNameById.get(approval.requestedByAgentId) ?? approval.requestedByAgentId.slice(0, 8)}
                 size="sm"
@@ -228,7 +228,7 @@ export function ApprovalDetail() {
             onClick={() => setShowRawPayload((v) => !v)}
           >
             <ChevronRight className={`h-3 w-3 transition-transform ${showRawPayload ? "rotate-90" : ""}`} />
-            {t("approvalDetail:seeFullRequest")}
+            {t("approvalDetail.seeFullRequest")}
           </button>
           {showRawPayload && (
             <pre className="text-xs bg-muted/40 rounded-md p-3 overflow-x-auto">
@@ -242,7 +242,7 @@ export function ApprovalDetail() {
         {error && <p className="text-sm text-destructive">{error}</p>}
         {linkedIssues && linkedIssues.length > 0 && (
           <div className="pt-2 border-t border-border/60">
-            <p className="text-xs text-muted-foreground mb-1.5">{t("approvalDetail:linkedIssues")}</p>
+            <p className="text-xs text-muted-foreground mb-1.5">{t("approvalDetail.linkedIssues")}</p>
             <div className="space-y-1.5">
               {linkedIssues.map((issue) => (
                 <Link
@@ -258,7 +258,7 @@ export function ApprovalDetail() {
               ))}
             </div>
             <p className="text-[11px] text-muted-foreground mt-2">
-              {t("approvalDetail:linkedIssuesRemainOpen")}
+              {t("approvalDetail.linkedIssuesRemainOpen")}
             </p>
           </div>
         )}
@@ -271,7 +271,7 @@ export function ApprovalDetail() {
                 onClick={() => approveMutation.mutate()}
                 disabled={approveMutation.isPending}
               >
-                {t("approvalDetail:approve")}
+                {t("approvalDetail.approve")}
               </Button>
               <Button
                 variant="destructive"
@@ -279,13 +279,13 @@ export function ApprovalDetail() {
                 onClick={() => rejectMutation.mutate()}
                 disabled={rejectMutation.isPending}
               >
-                {t("approvalDetail:reject")}
+                {t("approvalDetail.reject")}
               </Button>
             </>
           )}
           {isBudgetApproval && approval.status === "pending" && (
             <p className="text-sm text-muted-foreground">
-              {t("approvalDetail:resolveFromBudgetControls")}
+              {t("approvalDetail.resolveFromBudgetControls")}
             </p>
           )}
           {approval.status === "pending" && (
@@ -295,7 +295,7 @@ export function ApprovalDetail() {
               onClick={() => revisionMutation.mutate()}
               disabled={revisionMutation.isPending}
             >
-              {t("approvalDetail:requestRevision")}
+              {t("approvalDetail.requestRevision")}
             </Button>
           )}
           {approval.status === "revision_requested" && (
@@ -305,7 +305,7 @@ export function ApprovalDetail() {
               onClick={() => resubmitMutation.mutate()}
               disabled={resubmitMutation.isPending}
             >
-              {t("approvalDetail:markResubmitted")}
+              {t("approvalDetail.markResubmitted")}
             </Button>
           )}
           {approval.status === "rejected" && approval.type === "hire_agent" && linkedAgentId && (
@@ -314,12 +314,12 @@ export function ApprovalDetail() {
               variant="outline"
               className="text-destructive border-destructive/40"
               onClick={() => {
-                if (!window.confirm(t("approvalDetail:deleteDisapprovedAgentConfirm"))) return;
+                if (!window.confirm(t("approvalDetail.deleteDisapprovedAgentConfirm"))) return;
                 deleteAgentMutation.mutate(linkedAgentId);
               }}
               disabled={deleteAgentMutation.isPending}
             >
-              {t("approvalDetail:deleteDisapprovedAgent")}
+              {t("approvalDetail.deleteDisapprovedAgent")}
             </Button>
           )}
         </div>
@@ -352,7 +352,7 @@ export function ApprovalDetail() {
         <Textarea
           value={commentBody}
           onChange={(e) => setCommentBody(e.target.value)}
-          placeholder={t("approvalDetail:addCommentPlaceholder")}
+          placeholder={t("approvalDetail.addCommentPlaceholder")}
           rows={3}
         />
         <div className="flex justify-end">
@@ -361,7 +361,7 @@ export function ApprovalDetail() {
             onClick={() => addCommentMutation.mutate()}
             disabled={!commentBody.trim() || addCommentMutation.isPending}
           >
-            {addCommentMutation.isPending ? t("approvalDetail:postingComment") : t("approvalDetail:postComment")}
+            {addCommentMutation.isPending ? t("approvalDetail.postingComment") : t("approvalDetail.postComment")}
           </Button>
         </div>
       </div>

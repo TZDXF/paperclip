@@ -384,7 +384,7 @@ export function IssueDetail() {
     [activeRun, liveRuns],
   );
   const sourceBreadcrumb = useMemo(
-    () => readIssueDetailBreadcrumb(location.state, location.search) ?? { label: "Issues", href: "/issues" },
+    () => readIssueDetailBreadcrumb(location.state, location.search) ?? { label: t("issues.breadcrumb"), href: "/issues" },
     [location.state, location.search],
   );
 
@@ -715,8 +715,8 @@ export function IssueDetail() {
         queryClient.setQueryData(queryKeys.issues.detail(issueId!), context.previousIssue);
       }
       pushToast({
-        title: "Comment failed",
-        body: err instanceof Error ? err.message : "Unable to post comment",
+        title: t("ui.commentFailed"),
+        body: err instanceof Error ? err.message : t("ui.unableToPostComment"),
         tone: "error",
       });
     },
@@ -803,8 +803,8 @@ export function IssueDetail() {
         queryClient.setQueryData(queryKeys.issues.detail(issueId!), context.previousIssue);
       }
       pushToast({
-        title: "Comment failed",
-        body: err instanceof Error ? err.message : "Unable to post comment",
+        title: t("ui.commentFailed"),
+        body: err instanceof Error ? err.message : t("ui.unableToPostComment"),
         tone: "error",
       });
     },
@@ -819,15 +819,15 @@ export function IssueDetail() {
     onSuccess: () => {
       invalidateIssue();
       pushToast({
-        title: "Interrupt requested",
+        title: t("ui.interruptRequested"),
         body: "The active run is stopping so queued comments can continue next.",
         tone: "success",
       });
     },
     onError: (err) => {
       pushToast({
-        title: "Interrupt failed",
-        body: err instanceof Error ? err.message : "Unable to interrupt the active run",
+        title: t("ui.interruptFailed"),
+        body: err instanceof Error ? err.message : t("ui.interruptFailedBody"),
         tone: "error",
       });
     },
@@ -878,11 +878,11 @@ export function IssueDetail() {
         title:
           variables.sharingPreferenceAtSubmit === "prompt"
             ? variables.allowSharing
-              ? "Feedback saved. Future votes will share"
-              : "Feedback saved. Future votes will stay local"
+              ? t("ui.feedbackSavedSharing")
+              : t("ui.feedbackSavedLocal")
             : variables.allowSharing
-              ? "Feedback saved and sharing enabled"
-              : "Feedback saved",
+              ? t("ui.feedbackSavedSharingEnabled")
+              : t("ui.feedbackSaved"),
         tone: "success",
       });
     },
@@ -891,8 +891,8 @@ export function IssueDetail() {
         queryClient.setQueryData(queryKeys.issues.feedbackVotes(issueId!), context.previousVotes);
       }
       pushToast({
-        title: "Failed to save feedback",
-        body: err instanceof Error ? err.message : "Unknown error",
+        title: t("ui.failedToSaveFeedback"),
+        body: err instanceof Error ? err.message : t("ui.unknownError"),
         tone: "error",
       });
     },
@@ -909,7 +909,7 @@ export function IssueDetail() {
       invalidateIssue();
     },
     onError: (err) => {
-      setAttachmentError(err instanceof Error ? err.message : "Upload failed");
+      setAttachmentError(err instanceof Error ? err.message : t("ui.uploadFailed"));
     },
   });
 
@@ -945,7 +945,7 @@ export function IssueDetail() {
       invalidateIssue();
     },
     onError: (err) => {
-      setAttachmentError(err instanceof Error ? err.message : "Delete failed");
+      setAttachmentError(err instanceof Error ? err.message : t("ui.deleteFailed"));
     },
   });
 
@@ -954,19 +954,19 @@ export function IssueDetail() {
     onSuccess: () => {
       invalidateIssue();
       navigate(sourceBreadcrumb.href.startsWith("/inbox") ? sourceBreadcrumb.href : "/inbox", { replace: true });
-      pushToast({ title: "Issue archived from inbox", tone: "success" });
+      pushToast({ title: t("ui.issueArchivedFromInbox"), tone: "success" });
     },
     onError: (err) => {
       pushToast({
-        title: "Archive failed",
-        body: err instanceof Error ? err.message : "Unable to archive this issue from the inbox",
+        title: t("ui.archiveFailed"),
+        body: err instanceof Error ? err.message : t("ui.archiveFailedBody"),
         tone: "error",
       });
     },
   });
 
   useEffect(() => {
-    const titleLabel = issue?.title ?? issueId ?? "Issue";
+    const titleLabel = issue?.title ?? issueId ?? t("issues.pageTitle");
     setBreadcrumbs([
       sourceBreadcrumb,
       { label: hasLiveRuns ? `🔵 ${titleLabel}` : titleLabel },
@@ -1081,11 +1081,11 @@ export function IssueDetail() {
     const md = `# ${issue.identifier}: ${title}\n\n${body}`.trimEnd();
     await navigator.clipboard.writeText(md);
     setCopied(true);
-    pushToast({ title: "Copied to clipboard", tone: "success" });
+    pushToast({ title: t("ui.copiedToClipboard"), tone: "success" });
     setTimeout(() => setCopied(false), 2000);
   };
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">Loading...</p>;
+  if (isLoading) return <p className="text-sm text-muted-foreground">{t("ui.loading")}</p>;
   if (error) return <p className="text-sm text-destructive">{error.message}</p>;
   if (!issue) return null;
 
@@ -1181,7 +1181,7 @@ export function IssueDetail() {
       {issue.hiddenAt && (
         <div className="flex items-center gap-2 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           <EyeOff className="h-4 w-4 shrink-0" />
-          This issue is hidden
+          {t("ui.thisIssueIsHidden")}
         </div>
       )}
 
@@ -1203,7 +1203,7 @@ export function IssueDetail() {
                 <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-cyan-400" />
               </span>
-              Live
+              {t("ui.live")}
             </span>
           )}
 
@@ -1213,7 +1213,7 @@ export function IssueDetail() {
               className="inline-flex items-center gap-1 rounded-full bg-violet-500/10 border border-violet-500/30 px-2 py-0.5 text-[10px] font-medium text-violet-600 dark:text-violet-400 shrink-0 hover:bg-violet-500/20 transition-colors"
             >
               <Repeat className="h-3 w-3" />
-              Routine
+              {t("ui.routine")}
             </Link>
           )}
 
@@ -1228,7 +1228,7 @@ export function IssueDetail() {
           ) : (
             <span className="inline-flex items-center gap-1 text-xs text-muted-foreground opacity-50 px-1 -mx-1 py-0.5">
               <Hexagon className="h-3 w-3 shrink-0" />
-              No project
+              {t("ui.noProject")}
             </span>
           )}
 
@@ -1312,7 +1312,7 @@ export function IssueDetail() {
                 }}
               >
                 <EyeOff className="h-3 w-3" />
-                Hide this Issue
+                {t("ui.hideThisIssue")}
               </button>
             </PopoverContent>
             </Popover>
@@ -1331,7 +1331,7 @@ export function IssueDetail() {
           onSave={(description) => updateIssue.mutateAsync({ description })}
           as="p"
           className="text-[15px] leading-7 text-foreground"
-          placeholder="Add a description..."
+          placeholder={t("ui.descriptionPlaceholder")}
           multiline
           mentions={mentionOptions}
           imageUploadHandler={async (file) => {
@@ -1426,7 +1426,7 @@ export function IssueDetail() {
         onDrop={(evt) => void handleAttachmentDrop(evt)}
       >
         <div className="flex items-center justify-between gap-2">
-          <h3 className="text-sm font-medium text-muted-foreground">Attachments</h3>
+          <h3 className="text-sm font-medium text-muted-foreground">{t("ui.attachments")}</h3>
           {attachmentUploadButton}
         </div>
 
@@ -1503,15 +1503,15 @@ export function IssueDetail() {
         <TabsList variant="line" className="w-full justify-start gap-1">
           <TabsTrigger value="comments" className="gap-1.5">
             <MessageSquare className="h-3.5 w-3.5" />
-            Comments
+            {t("ui.comments")}
           </TabsTrigger>
           <TabsTrigger value="subissues" className="gap-1.5">
             <ListTree className="h-3.5 w-3.5" />
-            Sub-issues
+            {t("ui.subIssues")}
           </TabsTrigger>
           <TabsTrigger value="activity" className="gap-1.5">
             <ActivityIcon className="h-3.5 w-3.5" />
-            Activity
+            {t("ui.activity")}
           </TabsTrigger>
           {issuePluginTabItems.map((item) => (
             <TabsTrigger key={item.value} value={item.value}>
@@ -1608,9 +1608,9 @@ export function IssueDetail() {
         <TabsContent value="activity">
           {linkedRuns && linkedRuns.length > 0 && (
             <div className="mb-3 px-3 py-2 rounded-lg border border-border">
-              <div className="text-sm font-medium text-muted-foreground mb-1">Cost Summary</div>
+              <div className="text-sm font-medium text-muted-foreground mb-1">{t("ui.costSummary")}</div>
               {!issueCostSummary.hasCost && !issueCostSummary.hasTokens ? (
-                <div className="text-xs text-muted-foreground">No cost data yet.</div>
+                <div className="text-xs text-muted-foreground">{t("ui.noCostDataYet")}</div>
               ) : (
                 <div className="flex flex-wrap gap-3 text-xs text-muted-foreground tabular-nums">
                   {issueCostSummary.hasCost && (
@@ -1631,7 +1631,7 @@ export function IssueDetail() {
             </div>
           )}
           {!activity || activity.length === 0 ? (
-            <p className="text-xs text-muted-foreground">No activity yet.</p>
+            <p className="text-xs text-muted-foreground">{t("ui.noActivityYet")}</p>
           ) : (
             <div className="space-y-1.5">
               {activity.slice(0, 20).map((evt) => (
@@ -1669,7 +1669,7 @@ export function IssueDetail() {
         >
           <CollapsibleTrigger className="flex w-full items-center justify-between px-3 py-2 text-left">
             <span className="text-sm font-medium text-muted-foreground">
-              Linked Approvals ({linkedApprovals.length})
+              {t("ui.linkedApprovals")} ({linkedApprovals.length})
             </span>
             <ChevronDown
               className={cn("h-4 w-4 text-muted-foreground transition-transform", secondaryOpen.approvals && "rotate-180")}
@@ -1703,7 +1703,7 @@ export function IssueDetail() {
       <Sheet open={mobilePropsOpen} onOpenChange={setMobilePropsOpen}>
         <SheetContent side="bottom" className="max-h-[85dvh] pb-[env(safe-area-inset-bottom)]">
           <SheetHeader>
-            <SheetTitle className="text-sm">Properties</SheetTitle>
+            <SheetTitle className="text-sm">{t("ui.properties")}</SheetTitle>
           </SheetHeader>
           <ScrollArea className="flex-1 overflow-y-auto">
             <div className="px-4 pb-4">

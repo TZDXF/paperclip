@@ -111,11 +111,11 @@ export function Agents() {
   }, [agents]);
 
   useEffect(() => {
-    setBreadcrumbs([{ label: t("agents:breadcrumb") }]);
+    setBreadcrumbs([{ label: t("agents.breadcrumb") }]);
   }, [setBreadcrumbs, t]);
 
   if (!selectedCompanyId) {
-    return <EmptyState icon={Bot} message={t("agents:selectCompany")} />;
+    return <EmptyState icon={Bot} message={t("agents.selectCompany")} />;
   }
 
   if (isLoading) {
@@ -131,10 +131,10 @@ export function Agents() {
         <Tabs value={tab} onValueChange={(v) => navigate(`/agents/${v}`)}>
           <PageTabBar
             items={[
-              { value: "all", label: t("agents:all") },
-              { value: "active", label: t("agents:active") },
-              { value: "paused", label: t("agents:paused") },
-              { value: "error", label: t("agents:error") },
+              { value: "all", label: t("agents.all") },
+              { value: "active", label: t("agents.active") },
+              { value: "paused", label: t("agents.paused") },
+              { value: "error", label: t("agents.error") },
             ]}
             value={tab}
             onValueChange={(v) => navigate(`/agents/${v}`)}
@@ -151,7 +151,7 @@ export function Agents() {
               onClick={() => setFiltersOpen(!filtersOpen)}
             >
               <SlidersHorizontal className="h-3 w-3" />
-              {t("agents:filters")}
+              {t("agents.filters")}
               {showTerminated && <span className="ml-0.5 px-1 bg-foreground/10 rounded text-[10px]">1</span>}
             </button>
             {filtersOpen && (
@@ -166,7 +166,7 @@ export function Agents() {
                   )}>
                     {showTerminated && <span className="text-background text-[10px] leading-none">&#10003;</span>}
                   </span>
-                  {t("agents:showTerminated")}
+                  {t("agents.showTerminated")}
                 </button>
               </div>
             )}
@@ -196,7 +196,7 @@ export function Agents() {
           )}
           <Button size="sm" variant="outline" onClick={openNewAgent}>
             <Plus className="h-3.5 w-3.5 mr-1.5" />
-            {t("agents:newAgent")}
+            {t("agents.newAgent")}
           </Button>
         </div>
       </div>
@@ -210,8 +210,8 @@ export function Agents() {
       {agents && agents.length === 0 && (
         <EmptyState
           icon={Bot}
-          message={t("agents:noAgents")}
-          action={t("agents:newAgent")}
+          message={t("agents.noAgents")}
+          action={t("agents.newAgent")}
           onAction={openNewAgent}
         />
       )}

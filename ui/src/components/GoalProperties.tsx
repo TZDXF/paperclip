@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import type { Goal } from "@paperclipai/shared";
 import { GOAL_STATUSES, GOAL_LEVELS } from "@paperclipai/shared";
 import { agentsApi } from "../api/agents";
@@ -72,6 +73,7 @@ function PickerButton({
 
 export function GoalProperties({ goal, onUpdate }: GoalPropertiesProps) {
   const { selectedCompanyId } = useCompany();
+  const { t } = useTranslation("goals");
 
   const { data: agents } = useQuery({
     queryKey: queryKeys.agents.list(selectedCompanyId!),
@@ -152,7 +154,7 @@ export function GoalProperties({ goal, onUpdate }: GoalPropertiesProps) {
       <Separator />
 
       <div className="space-y-1">
-        <PropertyRow label="Created">
+        <PropertyRow label={t("goals.created")}>
           <span className="text-sm">{formatDate(goal.createdAt)}</span>
         </PropertyRow>
         <PropertyRow label="Updated">

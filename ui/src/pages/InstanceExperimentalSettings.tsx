@@ -15,8 +15,8 @@ export function InstanceExperimentalSettings() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: t("instanceExperimentalSettings:instanceExperimentalSettings") },
-      { label: t("instanceExperimentalSettings:experimental") },
+      { label: t("instanceExperimentalSettings.instanceExperimentalSettings") },
+      { label: t("instanceExperimentalSettings.experimental") },
     ]);
   }, [setBreadcrumbs, t]);
 
@@ -36,12 +36,12 @@ export function InstanceExperimentalSettings() {
       ]);
     },
     onError: (error) => {
-      setActionError(error instanceof Error ? error.message : "Failed to update experimental settings.");
+      setActionError(error instanceof Error ? error.message : t("pages.failedToUpdateExperimentalSettings"));
     },
   });
 
   if (experimentalQuery.isLoading) {
-    return <div className="text-sm text-muted-foreground">{t("instanceExperimentalSettings:loadingExperimentalSettings")}</div>;
+    return <div className="text-sm text-muted-foreground">{t("instanceExperimentalSettings.loadingExperimentalSettings")}</div>;
   }
 
   if (experimentalQuery.error) {
@@ -49,7 +49,7 @@ export function InstanceExperimentalSettings() {
       <div className="text-sm text-destructive">
         {experimentalQuery.error instanceof Error
           ? experimentalQuery.error.message
-          : t("instanceExperimentalSettings:failedToLoadExperimentalSettings")}
+          : t("instanceExperimentalSettings.failedToLoadExperimentalSettings")}
       </div>
     );
   }
@@ -62,10 +62,10 @@ export function InstanceExperimentalSettings() {
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <FlaskConical className="h-5 w-5 text-muted-foreground" />
-          <h1 className="text-lg font-semibold">{t("instanceExperimentalSettings:experimental")}</h1>
+          <h1 className="text-lg font-semibold">{t("instanceExperimentalSettings.experimental")}</h1>
         </div>
         <p className="text-sm text-muted-foreground">
-          {t("instanceExperimentalSettings:experimentalSettingsDescription")}
+          {t("instanceExperimentalSettings.experimentalSettingsDescription")}
         </p>
       </div>
 
@@ -78,9 +78,9 @@ export function InstanceExperimentalSettings() {
       <section className="rounded-xl border border-border bg-card p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1.5">
-            <h2 className="text-sm font-semibold">{t("instanceExperimentalSettings:enableIsolatedWorkspaces")}</h2>
+            <h2 className="text-sm font-semibold">{t("instanceExperimentalSettings.enableIsolatedWorkspaces")}</h2>
             <p className="max-w-2xl text-sm text-muted-foreground">
-              {t("instanceExperimentalSettings:enableIsolatedWorkspacesDescription")}
+              {t("instanceExperimentalSettings.enableIsolatedWorkspacesDescription")}
             </p>
           </div>
           <ToggleSwitch
@@ -95,9 +95,9 @@ export function InstanceExperimentalSettings() {
       <section className="rounded-xl border border-border bg-card p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1.5">
-            <h2 className="text-sm font-semibold">{t("instanceExperimentalSettings:autoRestartDevServer")}</h2>
+            <h2 className="text-sm font-semibold">{t("instanceExperimentalSettings.autoRestartDevServer")}</h2>
             <p className="max-w-2xl text-sm text-muted-foreground">
-              {t("instanceExperimentalSettings:autoRestartDevServerDescription")}
+              {t("instanceExperimentalSettings.autoRestartDevServerDescription")}
             </p>
           </div>
           <ToggleSwitch

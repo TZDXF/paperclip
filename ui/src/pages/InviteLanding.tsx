@@ -104,7 +104,7 @@ export function InviteLandingPage() {
       setResult({ kind: asBootstrap ? "bootstrap" : "join", payload });
     },
     onError: (err) => {
-      setError(err instanceof Error ? err.message : "Failed to accept invite");
+      setError(err instanceof Error ? err.message : t("pages.inviteLanding.failedToAcceptInvite"));
     },
   });
 

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@/lib/router";
+import { useTranslation } from "react-i18next";
 import { AGENT_ROLE_LABELS, type Agent, type AgentRuntimeState } from "@paperclipai/shared";
 import { agentsApi } from "../api/agents";
 import { useCompany } from "../context/CompanyContext";
@@ -28,6 +29,7 @@ function PropertyRow({ label, children }: { label: string; children: React.React
 
 export function AgentProperties({ agent, runtimeState }: AgentPropertiesProps) {
   const { selectedCompanyId } = useCompany();
+  const { t } = useTranslation("agents");
 
   const { data: agents } = useQuery({
     queryKey: queryKeys.agents.list(selectedCompanyId!),
@@ -87,7 +89,7 @@ export function AgentProperties({ agent, runtimeState }: AgentPropertiesProps) {
             )}
           </PropertyRow>
         )}
-        <PropertyRow label="Created">
+        <PropertyRow label={t("agents.created")}>
           <span className="text-sm">{formatDate(agent.createdAt)}</span>
         </PropertyRow>
       </div>
